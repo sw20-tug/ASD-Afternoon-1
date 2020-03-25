@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="LangApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="lang" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="at.tugraz.sw20asd.lang.LangApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
