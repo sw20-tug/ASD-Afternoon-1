@@ -50,3 +50,6 @@ modules.xml
 .vscode/
 
 !.idea
+
+### VOCAB FILES ###
+*.vocab
