@@ -4,6 +4,7 @@ This is the LANG (Vocabulary Trainer) repository for the team *ASD: Afternoon 1*
 ##Requirements
 * JDK 11
 * Maven
+* [SceneBuilder](https://gluonhq.com/products/scene-builder/)
 
 ##Getting Started
  * Open the project in Eclipse or IntelliJ IDEA.

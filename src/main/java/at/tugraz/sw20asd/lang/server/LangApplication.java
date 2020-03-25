@@ -1,4 +1,4 @@
-package at.tugraz.sw20asd.lang;
+package at.tugraz.sw20asd.lang.server;
 
 import java.util.Arrays;
 
