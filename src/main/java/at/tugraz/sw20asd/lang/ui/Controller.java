@@ -19,7 +19,7 @@ public class Controller extends VBox {
         loader.setControllerFactory(c -> this);
         loader.setRoot(this);
         try {
-            loader.load(getClass().getResource("/trainer.fxml").openStream());
+            loader.load(getClass().getResource("/main.fxml").openStream());
 
         } catch (IOException ex) {
             throw new RuntimeException(ex);
