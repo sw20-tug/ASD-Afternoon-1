@@ -1,37 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<fx:root xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.tugraz.sw20asd.lang.ui.Controller"
-            prefHeight="400.0" prefWidth="600.0" type="VBox">
-    <Label fx:id="title" layoutX="50.0" layoutY="73.0" prefWidth="350" text="Add new vocabulary">
+<fx:root alignment="TOP_CENTER" prefHeight="600.0" prefWidth="442.0" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz.sw20asd.lang.ui.Controller">
+    <style>-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;</style>
+    <Label fx:id="title" alignment="CENTER" layoutX="300.0" layoutY="80.0" prefHeight="50.0" prefWidth="399.0" text="LANG" textAlignment="CENTER">
         <font>
-            <Font size="34.0" />
-        </font></Label>
-
-    <Label fx:id="german_label" layoutX="50.0" layoutY="218.0" prefWidth="350" text="German:">
+            <Font name="Century" size="34.0" />
+        </font>
+      <VBox.margin>
+         <Insets top="20.0" />
+      </VBox.margin></Label>
+   <Line endX="171.1016387939453" endY="-0.8284531831741333" startX="-180.19125366210938" startY="-0.8284209966659546" />
+    <Button fx:id="return_btn" layoutX="318.0" layoutY="376.0" prefHeight="60.0" prefWidth="376.0" style="-fx-border-insets: 1;" text="Overview">
         <font>
-            <Font size="16.0" />
-        </font></Label>
-    <TextField fx:id="german_field" layoutX="50.0" layoutY="238.0" prefWidth="350" />
-
-    <Label fx:id="english_label" layoutX="50.0" layoutY="294.0" prefWidth="350" text="English:">
-        <font>
-            <Font size="16.0" />
-        </font></Label>
-    <TextField fx:id="english_field" layoutX="50.0" layoutY="314.0" prefWidth="350" />
-
-    <Button fx:id="submit_btn" layoutX="50.0" layoutY="376.0" text="Submit">
-        <font>
-            <Font size="16.0" />
-        </font></Button>
-    <Button fx:id="return_btn" layoutX="318.0" layoutY="376.0" text="Return">
-        <font>
-            <Font size="16.0" />
-        </font></Button>
+            <Font name="Berlin Sans FB" size="16.0" />
+        </font>
+      <VBox.margin>
+         <Insets top="20.0" />
+      </VBox.margin></Button>
+   <Button fx:id="return_btn1" alignment="CENTER" prefHeight="60.0" prefWidth="373.0" text="Add Vocabulary">
+      <font>
+         <Font name="Berlin Sans FB" size="16.0" />
+      </font>
+      <VBox.margin>
+         <Insets top="10.0" />
+      </VBox.margin>
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+   </Button>
+   <Button fx:id="return_btn11" prefHeight="60.0" prefWidth="373.0" text="Vocabulary Trainer">
+      <font>
+         <Font name="Berlin Sans FB" size="16.0" />
+      </font>
+      <VBox.margin>
+         <Insets top="10.0" />
+      </VBox.margin>
+   </Button>
+   <Button fx:id="return_btn12" prefHeight="60.0" prefWidth="373.0" text="Exit">
+      <font>
+         <Font name="Berlin Sans FB" size="16.0" />
+      </font>
+      <VBox.margin>
+         <Insets top="200.0" />
+      </VBox.margin>
+   </Button>
+   <Line endX="244.09288024902344" endY="-0.6212470531463623" startX="100.0" />
 
 </fx:root>
