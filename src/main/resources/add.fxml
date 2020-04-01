@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="281.0" prefWidth="388.0" style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz.sw20asd.lang.ui.Controller">
+<fx:root type="VBox" alignment="TOP_CENTER" prefHeight="281.0" prefWidth="388.0" style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz.sw20asd.lang.ui.Controller">
    <children>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="422.0">
          <children>
@@ -105,4 +105,4 @@
          </VBox.margin>
       </Button>
    </children>
-</VBox>
+</fx:root>
