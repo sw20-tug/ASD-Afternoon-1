@@ -1,37 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
 <fx:root xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.tugraz.sw20asd.lang.ui.Controller"
-            prefHeight="400.0" prefWidth="600.0" type="VBox">
-    <Label fx:id="title" layoutX="50.0" layoutY="73.0" prefWidth="350" text="Add new vocabulary">
-        <font>
-            <Font size="34.0" />
-        </font></Label>
-
-    <Label fx:id="german_label" layoutX="50.0" layoutY="218.0" prefWidth="350" text="German:">
-        <font>
-            <Font size="16.0" />
-        </font></Label>
-    <TextField fx:id="german_field" layoutX="50.0" layoutY="238.0" prefWidth="350" />
-
-    <Label fx:id="english_label" layoutX="50.0" layoutY="294.0" prefWidth="350" text="English:">
-        <font>
-            <Font size="16.0" />
-        </font></Label>
-    <TextField fx:id="english_field" layoutX="50.0" layoutY="314.0" prefWidth="350" />
-
-    <Button fx:id="submit_btn" layoutX="50.0" layoutY="376.0" text="Submit">
-        <font>
-            <Font size="16.0" />
-        </font></Button>
-    <Button fx:id="return_btn" layoutX="318.0" layoutY="376.0" text="Return">
-        <font>
-            <Font size="16.0" />
-        </font></Button>
-
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="at.tugraz.sw20asd.lang.ui.Controller"
+         prefHeight="600.0" prefWidth="500.0" type="VBox">
 </fx:root>
