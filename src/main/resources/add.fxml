@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root alignment="TOP_CENTER" prefHeight="600.0" prefWidth="500.0" style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;" type="VBox" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz.sw20asd.lang.ui.Controller">
+
+    <AnchorPane prefHeight="602.0" prefWidth="800.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+    <children>
+
+    <Label fx:id="title" alignment="CENTER" layoutX="50.0" layoutY="73.0" maxWidth="-Infinity" prefHeight="42.0" prefWidth="350" text="Add new vocabulary" textAlignment="CENTER">
+        <font>
+            <Font name="Abyssinica SIL" size="34.0" />
+        </font></Label>
+    <Label fx:id="german_label" layoutX="50.0" layoutY="170.0" prefHeight="0.0" prefWidth="350" text="German:">
+        <font>
+            <Font name="Abyssinica SIL" size="16.0" />
+        </font></Label>
+    <TextField fx:id="german_field" layoutX="50.0" layoutY="190.0" maxWidth="350.0" prefHeight="26.0" prefWidth="350" GridPane.rowIndex="2" />
+
+    <Label fx:id="english_label" layoutX="50.0" layoutY="246.0" prefHeight="0.0" prefWidth="350" text="English:">
+        <font>
+            <Font name="Abyssinica SIL" size="16.0" />
+        </font></Label>
+    <TextField fx:id="english_field" layoutX="50.0" layoutY="266.0" maxWidth="350.0" prefHeight="26.0" prefWidth="350.0" />
+    <Button fx:id="return_btn" layoutX="50.0" layoutY="328.0" text="Return" GridPane.rowIndex="8">
+        <font>
+            <Font name="Abyssinica SIL" size="16.0" />
+        </font></Button>
+
+    <Button fx:id="submit_btn" layoutX="321.0" layoutY="328.0" text="Submit">
+        <font>
+            <Font name="Abyssinica SIL" size="16.0" />
+        </font></Button>
+        <Line endX="171.1016387939453" endY="-0.8284531831741333" layoutX="232.0" layoutY="128.0" startX="-180.19125366210938" startY="-0.8284209966659546" strokeMiterLimit="20.0" />
+
+    </children>
+    </AnchorPane>
+
+</fx:root>
