@@ -13,20 +13,6 @@ import java.io.IOException;
 
 public class Controller extends VBox {
 
-    @FXML
-    private TextField german_field;
-    @FXML
-    private TextField english_field;
-    @FXML
-    private Label german_label;
-    @FXML
-    private Label english_label;
-    @FXML
-    private Label title;
-    @FXML
-    private Button submit_btn;
-    @FXML
-    private Button return_btn;
 
     public Controller() {
         FXMLLoader loader = new FXMLLoader();
@@ -38,6 +24,8 @@ public class Controller extends VBox {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+
+        this.getChildren().add(new Layout());
 
     }
 }
