@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<junit-jupiter.version>5.4.2</junit-jupiter.version>
 	</properties>
 
 	<dependencies>
@@ -66,6 +67,13 @@
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
 			<version>11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
