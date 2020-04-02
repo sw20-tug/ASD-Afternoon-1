@@ -34,11 +34,10 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
             return;
         }
 
-        for(int i = 0; i < listOfFiles.length; ++i) {
-            File file = listOfFiles[i];
-            if(file.isFile()) {
-                Vocabulary vocab = readVocabularyFromFile(file);
-                if(vocab != null) {
+        for (File f : listOfFiles) {
+            if (f.isFile()) {
+                Vocabulary vocab = readVocabularyFromFile(f);
+                if (vocab != null) {
                     _vocabularies.add(vocab);
                 }
             }
@@ -53,6 +52,7 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
     @Override
     public boolean addVocabulary(Vocabulary vocabulary) {
         serializeVocabularyToFile(vocabulary);
+        _vocabularies.add(vocabulary);
         return true;
     }
 
