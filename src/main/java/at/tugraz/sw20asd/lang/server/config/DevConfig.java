@@ -12,6 +12,6 @@ public class DevConfig {
 
     @Bean
     public VocabularyDAO vocabularyDAO() {
-        return new VocabularyDAOFileImpl();
+        return new VocabularyDAOFileImpl("vocabs");
     }
 }

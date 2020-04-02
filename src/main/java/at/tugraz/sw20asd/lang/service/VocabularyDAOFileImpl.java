@@ -1,36 +1,36 @@
 package at.tugraz.sw20asd.lang.service;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
-import at.tugraz.sw20asd.lang.service.VocabularyDAO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Repository;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 @Repository
 public class VocabularyDAOFileImpl implements VocabularyDAO {
-    private final String vocabFolder = "vocabs";
 
     private ObjectMapper _mapper;
+    private String _vocabFolder;
+    private List<Vocabulary> _vocabularies;
 
-    List<Vocabulary> _vocabularies;
-
-    public VocabularyDAOFileImpl() {
+    public VocabularyDAOFileImpl(String workingDirectory) {
+        _vocabFolder = workingDirectory;
         _mapper = new ObjectMapper();
         _mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         _vocabularies = new ArrayList<>();
-        File folder = new File(vocabFolder);
+        File folder = new File(_vocabFolder);
 
         File[] listOfFiles = folder.listFiles();
         if(listOfFiles == null) {
-            new File(vocabFolder).mkdirs();
+            new File(_vocabFolder).mkdirs();
             return;
         }
 
@@ -76,7 +76,7 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
             }
             String filename = vocabId + ".vocab";
 
-            File file = Paths.get(vocabFolder, filename).toFile();
+            File file = Paths.get(_vocabFolder, filename).toFile();
 
             _mapper.writeValue(file, vocab);
         } catch(Exception e) {
