@@ -16,8 +16,12 @@ import java.net.URI;
 @RequestMapping("/vocab")
 public class VocabularyController {
 
-    @Autowired
     private VocabularyDAO _vocabularyDao;
+
+    @Autowired
+    public VocabularyController(VocabularyDAO vocabularyDAO) {
+        _vocabularyDao = vocabularyDAO;
+    }
 
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> addVocabulary(@RequestBody Vocabulary vocabulary) throws Exception {
