@@ -1,7 +1,7 @@
 package at.tugraz.sw20asd.lang.server;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
-import at.tugraz.sw20asd.lang.server.dao.VocabularyDAO;
+import at.tugraz.sw20asd.lang.service.VocabularyDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
