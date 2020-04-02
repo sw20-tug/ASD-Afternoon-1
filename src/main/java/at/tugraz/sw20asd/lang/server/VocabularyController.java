@@ -1,7 +1,7 @@
 package at.tugraz.sw20asd.lang.server;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
-import at.tugraz.sw20asd.lang.server.dao.VocabularyDAO;
+import at.tugraz.sw20asd.lang.service.VocabularyDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +16,12 @@ import java.net.URI;
 @RequestMapping("/vocab")
 public class VocabularyController {
 
-    @Autowired
     private VocabularyDAO _vocabularyDao;
+
+    @Autowired
+    public VocabularyController(VocabularyDAO vocabularyDAO) {
+        _vocabularyDao = vocabularyDAO;
+    }
 
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> addVocabulary(@RequestBody Vocabulary vocabulary) throws Exception {

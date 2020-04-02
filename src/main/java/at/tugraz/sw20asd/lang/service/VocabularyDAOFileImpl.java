@@ -1,6 +1,7 @@
-package at.tugraz.sw20asd.lang.server.dao;
+package at.tugraz.sw20asd.lang.service;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.service.VocabularyDAO;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -59,7 +60,6 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
         Vocabulary vocab = null;
         try {
             vocab = _mapper.readValue(Files.readString(file.toPath()), Vocabulary.class);
-
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         } catch (IOException e) {

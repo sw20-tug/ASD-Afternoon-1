@@ -1,4 +1,4 @@
-package at.tugraz.sw20asd.lang.server.dao;
+package at.tugraz.sw20asd.lang.service;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 
