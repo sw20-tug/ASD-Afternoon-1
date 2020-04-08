@@ -1,5 +1,7 @@
-package at.tugraz.sw20asd.lang.ui;
+package at.tugraz.sw20asd.lang.ui.Controller;
 
+import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
+import at.tugraz.sw20asd.lang.ui.VocabularyAccessRestImpl;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -29,9 +31,12 @@ public class Controller extends VBox {
 
     FXMLLoader loader = new FXMLLoader();
 
+    private VocabularyAccess vocab;
 
 
     public Controller() {
+
+        vocab = new VocabularyAccessRestImpl("localhost", 8080);
 
         loader.setControllerFactory(c -> this);
         loader.setRoot(this);
@@ -42,13 +47,12 @@ public class Controller extends VBox {
             throw new RuntimeException(ex);
         }
 
-        // this.getChildren().add(new Layout());
     }
     public void initialize(){
 
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                AddVocab add = new AddVocab();
+                AddVocab add = new AddVocab(vocab);
                 getScene().setRoot(add);
             }
         });

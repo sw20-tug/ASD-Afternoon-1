@@ -1,4 +1,4 @@
-package at.tugraz.sw20asd.lang.ui;
+package at.tugraz.sw20asd.lang.ui.Controller;
 
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-import at.tugraz.sw20asd.lang.ui.Controller;
+import at.tugraz.sw20asd.lang.ui.Controller.Controller;
 
 
 public class LangUI extends Application {
