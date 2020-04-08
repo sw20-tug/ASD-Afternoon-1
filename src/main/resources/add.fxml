@@ -5,55 +5,85 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<fx:root alignment="TOP_CENTER" prefHeight="600.0" prefWidth="500.0" style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;" type="VBox" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz.sw20asd.lang.ui.AddVocab">
+<fx:root alignment="TOP_CENTER" prefHeight="600.0" prefWidth="500.0" style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;" type="VBox" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz.sw20asd.lang.ui.Controller.AddVocab">
 
-    <AnchorPane prefHeight="602.0" prefWidth="800.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-    <children>
+    <AnchorPane fx:id="anchor_pane" prefHeight="602.0" prefWidth="800.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <children>
 
-    <Label fx:id="title" alignment="CENTER" layoutX="63.0" layoutY="75.0" maxWidth="-Infinity" prefHeight="42.0" prefWidth="350" text="Add new vocabulary" textAlignment="CENTER">
-        <font>
-            <Font name="Abyssinica SIL" size="34.0" />
-        </font></Label>
-    <Label fx:id="from_label" layoutX="63.0" layoutY="255.0" prefHeight="0.0" prefWidth="350" text="From:">
-        <font>
-            <Font name="Abyssinica SIL" size="16.0" />
-        </font></Label>
-    <TextField fx:id="from_field" layoutX="63.0" layoutY="275.0" maxWidth="350.0" prefHeight="26.0" prefWidth="350" GridPane.rowIndex="2" />
+            <Label fx:id="title" alignment="CENTER" layoutX="63.0" layoutY="75.0" maxWidth="-Infinity" prefHeight="42.0" prefWidth="350" text="Add new vocabulary" textAlignment="CENTER">
+                <font>
+                    <Font name="Abyssinica SIL" size="34.0" />
+                </font></Label>
 
-    <Label fx:id="to_label" layoutX="63.0" layoutY="331.0" prefHeight="0.0" prefWidth="350" text="To:">
-        <font>
-            <Font name="Abyssinica SIL" size="16.0" />
-        </font></Label>
-    <TextField fx:id="to_field" layoutX="63.0" layoutY="351.0" maxWidth="350.0" prefHeight="26.0" prefWidth="350.0" />
-    <Button fx:id="return_btn" layoutX="63.0" layoutY="413.0" text="Return" GridPane.rowIndex="8">
-        <font>
-            <Font name="Abyssinica SIL" size="16.0" />
-        </font></Button>
 
-    <Button fx:id="submit_btn" layoutX="334.0" layoutY="413.0" text="Submit">
-        <font>
-            <Font name="Abyssinica SIL" size="16.0" />
-        </font></Button>
-        <Line endX="171.1016387939453" endY="-0.8284531831741333" layoutX="245.0" layoutY="130.0" startX="-180.19125366210938" startY="-0.8284209966659546" strokeMiterLimit="20.0" />
-         <ComboBox fx:id="from_choice" layoutX="64.0" layoutY="193.0" prefHeight="26.0" prefWidth="133.0" />
-         <ComboBox fx:id="to_choice" layoutX="280.0" layoutY="193.0" prefHeight="26.0" prefWidth="133.0" />
-         <Label fx:id="from" layoutX="65.0" layoutY="170.0" text="From:">
-            <font>
-               <Font name="Abyssinica SIL" size="16.0" />
-            </font>
-         </Label>
-         <Label fx:id="to" layoutX="280.0" layoutY="170.0" text="To:">
-            <font>
-               <Font name="Abyssinica SIL" size="16.0" />
-            </font>
-         </Label>
-         <Label fx:id="user_info" layoutX="63.0" layoutY="476.0" prefHeight="42.0" prefWidth="353.0" text="User Information">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Label>
+            <Label fx:id="category_label" layoutX="64.0" layoutY="159.0" text="Name:">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0" />
+                </font>
+            </Label>
+            <TextField fx:id="category" layoutX="114.0" layoutY="155.0" prefHeight="26.0" prefWidth="299.0" />
+            <!--            <Button fx:id="ok_btn" layoutX="376.0" layoutY="153.0" prefHeight="29.0" prefWidth="42.0" text="OK">-->
+            <!--                <font>-->
+            <!--                    <Font name="Abyssinica SIL" size="15.0" />-->
+            <!--                </font></Button>-->
 
-    </children>
+            <Label fx:id="from_label" layoutX="65.0" layoutY="256.0" prefHeight="17.0" prefWidth="145.0" text="From:">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0" />
+                </font></Label>
+
+            <Label fx:id="to_label" layoutX="269.0" layoutY="256.0" prefHeight="17.0" prefWidth="151.0" text="To:">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0" />
+                </font></Label>
+
+            <TextField fx:id="from_field" layoutX="268.0" layoutY="277.0" prefHeight="26.0" prefWidth="145.0" />
+            <TextField fx:id="to_field" layoutX="64.0" layoutY="279.0" prefHeight="26.0" prefWidth="145.0" />
+
+            <TextField fx:id="from_field1" layoutX="268.0" layoutY="307.0" prefHeight="26.0" prefWidth="145.0" />
+            <TextField fx:id="to_field1" layoutX="64.0" layoutY="309.0" prefHeight="26.0" prefWidth="145.0" />
+
+            <TextField fx:id="from_field2" layoutX="268.0" layoutY="337.0" prefHeight="26.0" prefWidth="145.0" />
+            <TextField fx:id="to_field2" layoutX="64.0" layoutY="339.0" prefHeight="26.0" prefWidth="145.0" />
+
+            <TextField fx:id="from_field3" layoutX="268.0" layoutY="367.0" prefHeight="26.0" prefWidth="145.0" />
+            <TextField fx:id="to_field3" layoutX="64.0" layoutY="369.0" prefHeight="26.0" prefWidth="145.0" />
+
+            <TextField fx:id="from_field4" layoutX="268.0" layoutY="397.0" prefHeight="26.0" prefWidth="145.0" />
+            <TextField fx:id="to_field4" layoutX="64.0" layoutY="399.0" prefHeight="26.0" prefWidth="145.0" />
+
+            <TextField fx:id="from_field5" layoutX="268.0" layoutY="427.0" prefHeight="26.0" prefWidth="145.0" />
+            <TextField fx:id="to_field5" layoutX="64.0" layoutY="429.0" prefHeight="26.0" prefWidth="145.0" />
+
+            <Button fx:id="return_btn" layoutX="63.0" layoutY="467.0" text="Return">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0" />
+                </font></Button>
+
+            <Button fx:id="submit_btn" layoutX="340.0" layoutY="467.0" text="Submit">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0" />
+                </font></Button>
+            <Line endX="171.1016387939453" endY="-0.8284531831741333" layoutX="245.0" layoutY="130.0" startX="-180.19125366210938" startY="-0.8284209966659546" strokeMiterLimit="20.0" />
+            <ComboBox fx:id="from_choice" layoutX="65.0" layoutY="220.0" prefHeight="26.0" prefWidth="145.0" />
+            <ComboBox fx:id="to_choice" layoutX="268.0" layoutY="220.0" prefHeight="26.0" prefWidth="145.0" />
+            <Label fx:id="from" layoutX="65.0" layoutY="197.0" text="From:">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0" />
+                </font>
+            </Label>
+            <Label fx:id="to" layoutX="268.0" layoutY="197.0" text="To:">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0" />
+                </font>
+            </Label>
+            <Label fx:id="user_info" layoutX="64.0" layoutY="496.0" prefHeight="42.0" prefWidth="353.0" text="User Information">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+
+        </children>
     </AnchorPane>
 
 </fx:root>
