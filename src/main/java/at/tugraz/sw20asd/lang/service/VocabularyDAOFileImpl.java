@@ -10,22 +10,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class VocabularyDAOFileImpl implements VocabularyDAO {
 
     private ObjectMapper _mapper;
     private String _vocabFolder;
-    private List<Vocabulary> _vocabularies;
+    private Map<Integer, Vocabulary> _vocabularies;
 
     public VocabularyDAOFileImpl(String workingDirectory) {
         _vocabFolder = workingDirectory;
         _mapper = new ObjectMapper();
         _mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        _vocabularies = new ArrayList<>();
+        _vocabularies = new HashMap<Integer, Vocabulary>();
         File folder = new File(_vocabFolder);
 
         File[] listOfFiles = folder.listFiles();
@@ -38,21 +39,26 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
             if (f.isFile()) {
                 Vocabulary vocab = readVocabularyFromFile(f);
                 if (vocab != null) {
-                    _vocabularies.add(vocab);
+                    _vocabularies.put(vocab.getID(), vocab);
                 }
             }
         }
     }
 
     @Override
-    public List<Vocabulary> findAll() {
-        return _vocabularies;
+    public Collection<Vocabulary> findAll() {
+        return _vocabularies.values();
+    }
+
+    @Override
+    public Vocabulary findById(int id) {
+        return _vocabularies.get(id);
     }
 
     @Override
     public boolean addVocabulary(Vocabulary vocabulary) {
         serializeVocabularyToFile(vocabulary);
-        _vocabularies.add(vocabulary);
+        _vocabularies.put(vocabulary.getID(), vocabulary);
         return true;
     }
 

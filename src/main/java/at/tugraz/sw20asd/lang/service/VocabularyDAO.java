@@ -2,10 +2,12 @@ package at.tugraz.sw20asd.lang.service;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface VocabularyDAO {
-    List<Vocabulary> findAll();
+    Collection<Vocabulary> findAll();
+
+    Vocabulary findById(int id);
 
     boolean addVocabulary(Vocabulary vocabulary);
 }
