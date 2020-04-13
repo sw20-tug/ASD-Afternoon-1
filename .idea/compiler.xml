@@ -7,14 +7,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="vocab-trainer" />
+        <module name="ASD-Afternoon-1" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ASD-Afternoon-1" target="11" />
       <module name="vocab-trainer" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ASD-Afternoon-1" options="-parameters" />
       <module name="vocab-trainer" options="-parameters" />
     </option>
   </component>
