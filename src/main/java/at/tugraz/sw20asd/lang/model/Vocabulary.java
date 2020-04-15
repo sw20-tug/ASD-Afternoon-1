@@ -77,4 +77,17 @@ public class Vocabulary {
                 + ", DstLang=" + _targetLanguage
                 + "]";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(!(obj instanceof Vocabulary))
+            return false;
+        Vocabulary v = (Vocabulary)obj;
+        return _id.equals(v._id)
+                && _name.equals(v._name)
+                && _sourceLanguage.equals(v._sourceLanguage)
+                && _targetLanguage.equals(v._targetLanguage);
+    }
 }

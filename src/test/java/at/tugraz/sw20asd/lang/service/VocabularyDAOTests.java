@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.Locale;
 
+import at.tugraz.sw20asd.lang.TestUtilities;
+
+import static at.tugraz.sw20asd.lang.TestUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class VocabularyDAOTests {
     private VocabularyDAO vocabularyDAO;
@@ -68,43 +69,9 @@ public class VocabularyDAOTests {
 
         Vocabulary testVocabulary = new Vocabulary();
         testVocabulary.setId(vocabularyId);
-        testVocabulary.setName(getRandomString());
+        testVocabulary.setName(TestUtilities.getRandomString());
         testVocabulary.setSourceLanguage(Locale.FRENCH);
         testVocabulary.setTargetLanguage(Locale.CHINESE);
         return testVocabulary;
-    }
-
-    private boolean isEmptyDirectory(File folder) {
-        File[] files = folder.listFiles();
-        if(files == null) {
-            return true;
-        }
-        return files.length == 0;
-    }
-
-    private String getRandomString() {
-        return java.util.UUID.randomUUID().toString();
-    }
-
-    private File getRandomWorkingDirectory() {
-        String directoryName = getRandomString();
-        File workingDir = new File(directoryName);
-        assumeFalse(workingDir.exists());
-        assumeTrue(workingDir.mkdirs());
-        return workingDir;
-    }
-
-    private void deleteFolder(File folder) {
-        File[] files = folder.listFiles();
-        if(files != null) {
-            for(File f: files) {
-                if(f.isDirectory()){
-                    deleteFolder(f);
-                } else {
-                    f.delete();
-                }
-            }
-        }
-        folder.delete();
     }
 }
