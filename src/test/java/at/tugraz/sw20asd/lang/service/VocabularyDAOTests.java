@@ -6,10 +6,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
+import at.tugraz.sw20asd.lang.TestUtilities;
+
+import static at.tugraz.sw20asd.lang.TestUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class VocabularyDAOTests {
@@ -37,7 +42,7 @@ public class VocabularyDAOTests {
 
     @Test
     public void testCanAddVocabulary() {
-        assertTrue(vocabularyDAO.addVocabulary(getTestVocabulary()));
+        assertEquals(0, vocabularyDAO.addVocabulary(getTestVocabulary()));
     }
 
     @Test
@@ -54,12 +59,30 @@ public class VocabularyDAOTests {
 
     @Test
     public void testAddMultiple() {
-        vocabularyDAO.addVocabulary(getTestVocabulary());
-        vocabularyDAO.addVocabulary(getTestVocabulary());
+        assumeTrue(0 == vocabularyDAO.addVocabulary(getTestVocabulary()));
+        assumeTrue(1 == vocabularyDAO.addVocabulary(getTestVocabulary()));
 
         assertAll(
                 () -> assertEquals(2, workingDirectory.listFiles().length),
                 () -> assertEquals(2, vocabularyDAO.findAll().size()));
+    }
+
+    @Test
+    public void testIndexingWithExistingFiles() {
+        List<Integer> indices = new ArrayList<>();
+
+        indices.add(vocabularyDAO.addVocabulary(getTestVocabulary()));
+        indices.add(vocabularyDAO.addVocabulary(getTestVocabulary()));
+
+        int highestIndexBeforeReset = Collections.max(indices);
+
+        assertTrue(deleteVocabularyFile(workingDirectory, Collections.min(indices)));
+
+        vocabularyDAO = new VocabularyDAOFileImpl(workingDirectory.getName());
+
+        int addedIndex = vocabularyDAO.addVocabulary(getTestVocabulary());
+
+        assertTrue(addedIndex > highestIndexBeforeReset);
     }
 
     private Vocabulary getTestVocabulary() {
@@ -68,43 +91,9 @@ public class VocabularyDAOTests {
 
         Vocabulary testVocabulary = new Vocabulary();
         testVocabulary.setId(vocabularyId);
-        testVocabulary.setName(getRandomString());
+        testVocabulary.setName(TestUtilities.getRandomString());
         testVocabulary.setSourceLanguage(Locale.FRENCH);
         testVocabulary.setTargetLanguage(Locale.CHINESE);
         return testVocabulary;
-    }
-
-    private boolean isEmptyDirectory(File folder) {
-        File[] files = folder.listFiles();
-        if(files == null) {
-            return true;
-        }
-        return files.length == 0;
-    }
-
-    private String getRandomString() {
-        return java.util.UUID.randomUUID().toString();
-    }
-
-    private File getRandomWorkingDirectory() {
-        String directoryName = getRandomString();
-        File workingDir = new File(directoryName);
-        assumeFalse(workingDir.exists());
-        assumeTrue(workingDir.mkdirs());
-        return workingDir;
-    }
-
-    private void deleteFolder(File folder) {
-        File[] files = folder.listFiles();
-        if(files != null) {
-            for(File f: files) {
-                if(f.isDirectory()){
-                    deleteFolder(f);
-                } else {
-                    f.delete();
-                }
-            }
-        }
-        folder.delete();
     }
 }
