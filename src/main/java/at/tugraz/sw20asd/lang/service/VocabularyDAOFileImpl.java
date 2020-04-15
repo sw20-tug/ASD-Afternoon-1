@@ -20,13 +20,14 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
     private ObjectMapper _mapper;
     private String _vocabFolder;
     private Map<Integer, Vocabulary> _vocabularies;
+    private int _nextFreeIndex = 0;
 
     public VocabularyDAOFileImpl(String workingDirectory) {
         _vocabFolder = workingDirectory;
         _mapper = new ObjectMapper();
         _mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        _vocabularies = new HashMap<Integer, Vocabulary>();
+        _vocabularies = new HashMap<>();
         File folder = new File(_vocabFolder);
 
         File[] listOfFiles = folder.listFiles();
@@ -40,6 +41,9 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
                 Vocabulary vocab = readVocabularyFromFile(f);
                 if (vocab != null) {
                     _vocabularies.put(vocab.getID(), vocab);
+                    if(vocab.getID() >= _nextFreeIndex) {
+                        _nextFreeIndex = vocab.getID() + 1;
+                    }
                 }
             }
         }
@@ -56,10 +60,15 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
     }
 
     @Override
-    public boolean addVocabulary(Vocabulary vocabulary) {
+    public int addVocabulary(Vocabulary vocabulary) {
+        int vocabularyIndex = _nextFreeIndex;
+
+        vocabulary.setId(vocabularyIndex);
         serializeVocabularyToFile(vocabulary);
         _vocabularies.put(vocabulary.getID(), vocabulary);
-        return true;
+
+        _nextFreeIndex++;
+        return vocabularyIndex;
     }
 
     private Vocabulary readVocabularyFromFile(File file) {

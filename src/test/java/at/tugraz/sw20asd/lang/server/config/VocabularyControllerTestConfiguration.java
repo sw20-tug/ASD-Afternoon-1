@@ -10,10 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doAnswer;
@@ -36,11 +33,9 @@ public class VocabularyControllerTestConfiguration {
         // addVocabulary
         doAnswer(inv -> {
             Vocabulary vocab = (Vocabulary) inv.getArguments()[0];
-            if (vocab.getID() == null) {
-                return false;
-            }
-            vocabularies.put(vocab.getID(), vocab);
-            return true;
+            Integer nextFreeIndex = Collections.max(vocabularies.keySet()) + 1;
+            vocabularies.put(nextFreeIndex, vocab);
+            return nextFreeIndex;
 
         }).when(mock).addVocabulary(any(Vocabulary.class));
 

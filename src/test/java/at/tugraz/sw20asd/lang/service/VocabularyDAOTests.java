@@ -6,12 +6,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import at.tugraz.sw20asd.lang.TestUtilities;
 
 import static at.tugraz.sw20asd.lang.TestUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class VocabularyDAOTests {
     private VocabularyDAO vocabularyDAO;
@@ -38,7 +42,7 @@ public class VocabularyDAOTests {
 
     @Test
     public void testCanAddVocabulary() {
-        assertTrue(vocabularyDAO.addVocabulary(getTestVocabulary()));
+        assertEquals(0, vocabularyDAO.addVocabulary(getTestVocabulary()));
     }
 
     @Test
@@ -55,12 +59,30 @@ public class VocabularyDAOTests {
 
     @Test
     public void testAddMultiple() {
-        vocabularyDAO.addVocabulary(getTestVocabulary());
-        vocabularyDAO.addVocabulary(getTestVocabulary());
+        assumeTrue(0 == vocabularyDAO.addVocabulary(getTestVocabulary()));
+        assumeTrue(1 == vocabularyDAO.addVocabulary(getTestVocabulary()));
 
         assertAll(
                 () -> assertEquals(2, workingDirectory.listFiles().length),
                 () -> assertEquals(2, vocabularyDAO.findAll().size()));
+    }
+
+    @Test
+    public void testIndexingWithExistingFiles() {
+        List<Integer> indices = new ArrayList<>();
+
+        indices.add(vocabularyDAO.addVocabulary(getTestVocabulary()));
+        indices.add(vocabularyDAO.addVocabulary(getTestVocabulary()));
+
+        int highestIndexBeforeReset = Collections.max(indices);
+
+        assertTrue(deleteVocabularyFile(workingDirectory, Collections.min(indices)));
+
+        vocabularyDAO = new VocabularyDAOFileImpl(workingDirectory.getName());
+
+        int addedIndex = vocabularyDAO.addVocabulary(getTestVocabulary());
+
+        assertTrue(addedIndex > highestIndexBeforeReset);
     }
 
     private Vocabulary getTestVocabulary() {

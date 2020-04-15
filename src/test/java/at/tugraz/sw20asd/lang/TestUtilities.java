@@ -1,6 +1,9 @@
 package at.tugraz.sw20asd.lang;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -38,5 +41,14 @@ public class TestUtilities {
             }
         }
         folder.delete();
+    }
+
+    public static boolean deleteVocabularyFile(File directory, int vocabularyIndex) {
+        try {
+            return Files.deleteIfExists(Paths.get(directory.getPath(), String.format("%d.vocab", vocabularyIndex)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
