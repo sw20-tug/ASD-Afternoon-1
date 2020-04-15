@@ -19,7 +19,7 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     public VocabularyAccessRestImpl(String host, int port){
 
         try {
-            uri = new URI(String.format("http://%s:%d/vocab", host, port));
+            uri = new URI(String.format("http://%s:%d/vocab/", host, port));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -46,7 +46,8 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
             return null;
         else{
             buffer = firstElement.get();
-            String temp = buffer.substring(buffer.lastIndexOf('/'+1));
+            String temp = buffer.substring(buffer.lastIndexOf('/'));
+            temp = temp.split("/")[1];
             id = Integer.parseInt(temp);
             return id;
         }

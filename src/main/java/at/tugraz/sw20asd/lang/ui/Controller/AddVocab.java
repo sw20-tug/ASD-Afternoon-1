@@ -2,6 +2,7 @@ package at.tugraz.sw20asd.lang.ui.Controller;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -239,10 +240,10 @@ public class AddVocab extends VBox {
 
         Vocabulary vocabulary = new Vocabulary(null, category_string, source_lang, target_lang);
 
-        for(int i = 0; i < amount; i++)
+        for(int i = 0; (i + 1) < amount; i++)
         {
             String from = vocabulary_list.get(i);
-            String to = vocabulary_list.get(i);
+            String to = vocabulary_list.get(++i);
             Entry entry = new Entry(from, to);
             vocabulary.addPhrase(entry);
         }
@@ -262,6 +263,17 @@ public class AddVocab extends VBox {
             }
             if(newState == Worker.State.SUCCEEDED){
                 id = addtask.getValue();
+
+                if(id != -1){
+                    Platform.runLater(() -> {
+                        updateUserInformation("added_vocab");
+                    });
+                }
+                else{
+                    Platform.runLater(() -> {
+                        updateUserInformation("");
+                    });
+                }
             }
         }));
 
@@ -270,43 +282,40 @@ public class AddVocab extends VBox {
         th.start();
 
 
-        if(id != -1)
-            updateUserInformation("added_vocab");
-        else
-            updateUserInformation("");
+
     }
 
     private int getAmountOfEntries(){
         int amount = 0;
         if(!from_field.getText().isEmpty() && !to_field.getText().isEmpty()){
-            amount++;
+            amount += 2;
             System.out.println(from_string + to_string);
             vocabulary_list.add(from_string);
             vocabulary_list.add(to_string);
         }
 
         if(!from_field1.getText().isEmpty() && !to_field1.getText().isEmpty()){
-            amount++;
+            amount += 2;
             vocabulary_list.addAll(from_string1, to_string1);
         }
 
         if(!from_field2.getText().isEmpty() && !to_field2.getText().isEmpty()){
-            amount++;
+            amount += 2;
             vocabulary_list.addAll(from_string2, to_string2);
         }
 
         if(!from_field3.getText().isEmpty() && !to_field3.getText().isEmpty()){
-            amount++;
+            amount += 2;
             vocabulary_list.addAll(from_string3, to_string3);
         }
 
         if(!from_field4.getText().isEmpty() && !to_field4.getText().isEmpty()){
-            amount++;
+            amount += 2;
             vocabulary_list.addAll(from_string4, to_string4);
         }
 
         if(!from_field5.getText().isEmpty() && !to_field5.getText().isEmpty()){
-            amount++;
+            amount += 2;
             vocabulary_list.addAll(from_string5, to_string5);
         }
         return amount;
