@@ -1,5 +1,6 @@
 package at.tugraz.sw20asd.lang.service;
 
+import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,10 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import at.tugraz.sw20asd.lang.TestUtilities;
 
 import static at.tugraz.sw20asd.lang.TestUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class VocabularyDAOTests {
@@ -53,6 +54,7 @@ public class VocabularyDAOTests {
 
     @Test
     public void testAddVocabularyCreatesFile() {
+        assumeTrue(isEmptyDirectory(workingDirectory));
         vocabularyDAO.addVocabulary(getTestVocabulary());
         assertFalse(isEmptyDirectory(workingDirectory));
     }
@@ -83,6 +85,19 @@ public class VocabularyDAOTests {
         int addedIndex = vocabularyDAO.addVocabulary(getTestVocabulary());
 
         assertTrue(addedIndex > highestIndexBeforeReset);
+    }
+
+    @Test
+    public void testAddPhrase() {
+        Entry e = new Entry(getRandomString(), getRandomString());
+        int vocabIndex = vocabularyDAO.addVocabulary(getTestVocabulary());
+
+        assumeFalse(vocabularyContainsEntry(vocabularyDAO.findById(vocabIndex), e));
+
+        assertAll(
+                () -> assertTrue(vocabularyDAO.addEntryToVocabulary(vocabIndex, e)),
+                () -> assertTrue(vocabularyContainsEntry(vocabularyDAO.findById((vocabIndex)), e))
+        );
     }
 
     private Vocabulary getTestVocabulary() {
