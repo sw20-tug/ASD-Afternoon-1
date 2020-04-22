@@ -6,6 +6,7 @@ import java.util.Locale;
 
 public class Vocabulary {
     public Vocabulary() {
+        this._entries = new ArrayList<>();
     }
 
     public Vocabulary(Integer id, String name, Locale sourceLanguage, Locale targetLanguage) {
