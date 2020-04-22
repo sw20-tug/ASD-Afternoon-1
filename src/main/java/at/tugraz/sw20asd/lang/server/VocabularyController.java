@@ -57,8 +57,17 @@ public class VocabularyController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping(path = "/{idString}/add")
+    @PostMapping(path="/{idString}/add")
     public ResponseEntity<Object> addEntryToVocabulary(@PathVariable String idString, @RequestBody Entry entry) {
+        int id;
+        try {
+            id = Integer.parseInt(idString);
+        } catch(NumberFormatException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+        if(_vocabularyDao.addEntryToVocabulary(id, entry)) {
+            return ResponseEntity.ok().build();
+        }
         return ResponseEntity.notFound().build();
     }
 }
