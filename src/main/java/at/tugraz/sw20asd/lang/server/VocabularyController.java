@@ -21,19 +21,17 @@ public class VocabularyController {
     }
 
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Object> addVocabulary(@RequestBody Vocabulary vocabulary) throws Exception {
-        Integer id = _vocabularyDao.findAll().size() + 1;
-        vocabulary.setId(id);
+    public ResponseEntity<Object> addVocabulary(@RequestBody Vocabulary vocabulary) {
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(vocabulary.getID())
-                .toUri();
+        try {
+            int insertedIndex = _vocabularyDao.addVocabulary(vocabulary);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(insertedIndex)
+                    .toUri();
 
-        if(_vocabularyDao.addVocabulary(vocabulary)) {
             return ResponseEntity.created(location).build();
-        }
-        else {
+        } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }
     }

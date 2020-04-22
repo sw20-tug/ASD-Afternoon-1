@@ -9,5 +9,5 @@ public interface VocabularyDAO {
 
     Vocabulary findById(int id);
 
-    boolean addVocabulary(Vocabulary vocabulary);
+    int addVocabulary(Vocabulary vocabulary);
 }
