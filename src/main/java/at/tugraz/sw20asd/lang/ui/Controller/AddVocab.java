@@ -38,8 +38,6 @@ public class AddVocab extends VBox {
     @FXML
     private Button return_btn;
     @FXML
-    private Button ok_btn;
-    @FXML
     private ComboBox<String> from_choice;
     @FXML
     private ComboBox<String> to_choice;
@@ -178,6 +176,8 @@ public class AddVocab extends VBox {
                 }
                 else{
                     sendAddCommand();
+                    clearAddVocab();
+
                 }
             }
         });
@@ -185,12 +185,7 @@ public class AddVocab extends VBox {
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
-                from_choice.getSelectionModel().clearSelection();
-                to_choice.getSelectionModel().clearSelection();
-                from_field.clear();
-                to_field.clear();
-                from_label.setText("From:");
-                to_label.setText("To:");
+                clearAddVocab();
                 Controller con = new Controller();
                 getScene().setRoot(con);
             }
@@ -289,9 +284,7 @@ public class AddVocab extends VBox {
         int amount = 0;
         if(!from_field.getText().isEmpty() && !to_field.getText().isEmpty()){
             amount += 2;
-            System.out.println(from_string + to_string);
-            vocabulary_list.add(from_string);
-            vocabulary_list.add(to_string);
+            vocabulary_list.addAll(from_string, to_string);
         }
 
         if(!from_field1.getText().isEmpty() && !to_field1.getText().isEmpty()){
@@ -349,5 +342,25 @@ public class AddVocab extends VBox {
         return  true;
     }
 
+    private void clearAddVocab(){
+        from_choice.getSelectionModel().clearSelection();
+        to_choice.getSelectionModel().clearSelection();
+        from_field.clear();
+        to_field1.clear();
+        from_field1.clear();
+        to_field2.clear();
+        from_field2.clear();
+        to_field3.clear();
+        from_field3.clear();
+        to_field4.clear();
+        from_field4.clear();
+        to_field5.clear();
+        from_field5.clear();
+        to_field.clear();
+        from_label.setText("From:");
+        to_label.setText("To:");
 
+        vocabulary_list.clear();
+        category.clear();
+    }
 }
