@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-
 import static at.tugraz.sw20asd.lang.TestUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -93,11 +92,16 @@ public class VocabularyDAOTests {
         int vocabIndex = vocabularyDAO.addVocabulary(getTestVocabulary());
 
         assumeFalse(vocabularyContainsEntry(vocabularyDAO.findById(vocabIndex), e));
+        vocabularyDAO.addEntryToVocabulary(vocabIndex, e);
+        assertTrue(vocabularyContainsEntry(vocabularyDAO.findById((vocabIndex)), e));
+    }
 
-        assertAll(
-                () -> assertTrue(vocabularyDAO.addEntryToVocabulary(vocabIndex, e)),
-                () -> assertTrue(vocabularyContainsEntry(vocabularyDAO.findById((vocabIndex)), e))
-        );
+    @Test
+    public void testAddPhrase_DaoRejectsNull() {
+        int vocabIndex = vocabularyDAO.addVocabulary(getTestVocabulary());
+
+        assertFalse(vocabularyDAO.addEntryToVocabulary(vocabIndex, null));
+        assertFalse(vocabularyDAO.findById(vocabIndex).getEntries().contains(null));
     }
 
     private Vocabulary getTestVocabulary() {
