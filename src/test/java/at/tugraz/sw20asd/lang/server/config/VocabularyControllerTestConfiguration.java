@@ -4,6 +4,7 @@ import at.tugraz.sw20asd.lang.TestUtilities;
 import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import at.tugraz.sw20asd.lang.service.VocabularyDAO;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
