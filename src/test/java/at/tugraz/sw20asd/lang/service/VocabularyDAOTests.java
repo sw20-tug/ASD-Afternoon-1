@@ -106,7 +106,7 @@ public class VocabularyDAOTests {
 
         Vocabulary testVocabulary = new Vocabulary();
         testVocabulary.setId(vocabularyId);
-        testVocabulary.setName(TestUtilities.getRandomString());
+        testVocabulary.setName(getRandomString());
         testVocabulary.setSourceLanguage(Locale.FRENCH);
         testVocabulary.setTargetLanguage(Locale.CHINESE);
         return testVocabulary;

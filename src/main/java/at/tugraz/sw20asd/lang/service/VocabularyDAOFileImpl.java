@@ -74,7 +74,20 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
 
     @Override
     public boolean addEntryToVocabulary(int vocabId, Entry e) {
-        return false;
+        if(e == null) {
+            return false;
+        }
+
+        var vocab = _vocabularies.get(vocabId);
+        if(vocab == null) {
+            return false;
+        }
+
+        vocab.addPhrase(e);
+
+        serializeVocabularyToFile(vocab);
+        _vocabularies.put(vocabId, vocab);
+        return true;
     }
 
     private Vocabulary readVocabularyFromFile(File file) {
