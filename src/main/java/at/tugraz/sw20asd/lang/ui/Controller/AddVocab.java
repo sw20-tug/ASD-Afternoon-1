@@ -176,7 +176,7 @@ public class AddVocab extends VBox {
                 }
                 else{
                     sendAddCommand();
-                    clearAddVocab();
+
 
                 }
             }
@@ -262,6 +262,7 @@ public class AddVocab extends VBox {
                 if(id != -1){
                     Platform.runLater(() -> {
                         updateUserInformation("added_vocab");
+                        clearAddVocab();
                     });
                 }
                 else{
