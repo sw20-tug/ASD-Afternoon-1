@@ -2,17 +2,10 @@ package at.tugraz.sw20asd.lang.ui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.Parent;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,7 +29,7 @@ public class AddVocab extends VBox {
 
     private String german_string;
     private String english_string;
-    private Layout layout;
+
     public AddVocab(){
         FXMLLoader loader = new FXMLLoader();
         loader.setControllerFactory(c -> this);
@@ -68,8 +61,6 @@ public class AddVocab extends VBox {
 
             public void handle(ActionEvent event) {
                 System.out.println("Return"); // replace with return to overview(?) tab
-
-
             }
         });
     }

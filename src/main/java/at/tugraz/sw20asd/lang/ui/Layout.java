@@ -9,14 +9,11 @@ public class Layout extends TabPane {
         this.setDisable(false);
 
         Tab addTab = new Tab("Add vocabulary");
-        Tab OverviewTab = new Tab("Overview");
 
 
         getTabs().add(addTab);
-        getTabs().add(OverviewTab);
 
         addTab.setContent(new AddVocab());
-        OverviewTab.setContent(new Overview());
 
         this.getSelectionModel().select(addTab);
     }
