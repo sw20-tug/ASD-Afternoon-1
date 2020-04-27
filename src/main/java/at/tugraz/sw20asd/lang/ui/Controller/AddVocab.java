@@ -74,10 +74,7 @@ public class AddVocab extends VBox {
 
     }
 
-
     public void initialize(){
-
-
         user_info.setVisible(false);
         ObservableList<String> languages =
                 FXCollections.observableArrayList("German", "English");
