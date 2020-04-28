@@ -58,7 +58,8 @@ public class Controller extends VBox {
 
         overview_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                System.out.println("overview");
+                Overview overview = new Overview(vocab);
+                getScene().setRoot(overview);
             }
         });
 
