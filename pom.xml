@@ -91,7 +91,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
-			<artifactId>testfx-junit</artifactId>
+			<artifactId>testfx-junit5</artifactId>
 			<version>4.0.15-alpha</version>
 			<scope>test</scope>
 		</dependency>
@@ -117,6 +117,13 @@
 				<version>0.0.4</version>
 				<configuration>
 					<mainClass>at.tugraz.sw20asd.lang.ui.GUIController</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
