@@ -24,12 +24,12 @@ class LangUITest {
 
         //only for git action to work
         //use "if-statement" if you want to see Application tests not headless
-        if (Boolean.getBoolean("headless")) {
+//        if (Boolean.getBoolean("headless")) {
             System.setProperty("testfx.robot", "glass");
             System.setProperty("testfx.headless", "true");
             System.setProperty("prism.order", "sw");
             System.setProperty("prism.text", "t2k");
-        }
+//        }
     }
     @Start
     public void start(Stage stage) throws Exception {
