@@ -1,6 +1,5 @@
 package at.tugraz.sw20asd.lang.server;
 
-import at.tugraz.sw20asd.lang.TestUtilities;
 import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +20,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 
+import static at.tugraz.sw20asd.lang.TestUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
@@ -38,9 +38,9 @@ public class VocabularyControllerTests {
 
 	@Test
 	public void testAddVocabulary() throws URISyntaxException {
-		HttpEntity<Vocabulary> request = CreateVocabularyEntity(TestUtilities.getRandomString());
+		HttpEntity<Vocabulary> request = createVocabularyEntity(getRandomString());
 
-		ResponseEntity<Object> result = restTemplate.postForEntity(VocabBaseURI(), request, Object.class);
+		ResponseEntity<Object> result = restTemplate.postForEntity(vocabBaseURI(), request, Object.class);
 
 		assertAll(
 				() -> assertEquals(201, result.getStatusCodeValue()),
@@ -48,14 +48,14 @@ public class VocabularyControllerTests {
 	}
 
 	@Test void testAddVocabularyDoesNotOverwriteExisting() throws URISyntaxException {
-		ResponseEntity<Vocabulary> result = restTemplate.getForEntity(VocabularyWithId(3), Vocabulary.class);
+		ResponseEntity<Vocabulary> result = restTemplate.getForEntity(vocabularyWithId(3), Vocabulary.class);
 		Vocabulary vocabularyBefore = result.getBody();
 
-		HttpEntity<Vocabulary> request = CreateVocabularyEntity(TestUtilities.getRandomString());
+		HttpEntity<Vocabulary> request = createVocabularyEntity(getRandomString());
 
-		restTemplate.postForEntity(VocabBaseURI(), request, String.class);
+		restTemplate.postForEntity(vocabBaseURI(), request, Object.class);
 
-		result = restTemplate.getForEntity(VocabularyWithId(3), Vocabulary.class);
+		result = restTemplate.getForEntity(vocabularyWithId(3), Vocabulary.class);
 		Vocabulary vocabularyAfter = result.getBody();
 
 		assertEquals(vocabularyBefore, vocabularyAfter);
@@ -64,7 +64,7 @@ public class VocabularyControllerTests {
 	@Test
 	public void testGetAllVocabularies() throws URISyntaxException {
 		ResponseEntity<List<Vocabulary>> response = restTemplate.exchange(
-				VocabBaseURI(),
+				vocabBaseURI(),
 				HttpMethod.GET,
 				null,
 				new ParameterizedTypeReference<List<Vocabulary>>() {
@@ -80,7 +80,7 @@ public class VocabularyControllerTests {
 
 	@Test
 	public void testGetVocabularyById_ExistingId() throws URISyntaxException {
-		ResponseEntity<Vocabulary> result = restTemplate.getForEntity(VocabularyWithId(2), Vocabulary.class);
+		ResponseEntity<Vocabulary> result = restTemplate.getForEntity(vocabularyWithId(2), Vocabulary.class);
 
 		assertAll(
 				() -> assertEquals(HttpStatus.OK, result.getStatusCode()),
@@ -95,7 +95,7 @@ public class VocabularyControllerTests {
 	@Test
 	public void testGetVocabularyById_NonExistingId() {
 		assertThrows(HttpClientErrorException.NotFound.class,
-				() -> restTemplate.getForEntity(VocabularyWithId(42), Vocabulary.class));
+				() -> restTemplate.getForEntity(vocabularyWithId(42), Vocabulary.class));
 	}
 
 	@Test
@@ -106,7 +106,33 @@ public class VocabularyControllerTests {
 				() -> restTemplate.getForEntity(uri, Vocabulary.class));
 	}
 
-	private HttpEntity<Vocabulary> CreateVocabularyEntity(String vocabularyName) {
+	@Test
+	public void testAddPhraseToVocabulary() throws URISyntaxException {
+		int vocabularyId = 2;
+
+		URI uri = new URI(String.format("http://localhost:%d/vocab/%d/add", randomServerPort, vocabularyId));
+		HttpEntity<Entry> e = createRandomEntryEntity();
+
+		restTemplate.postForEntity(uri, e, Object.class);
+
+		ResponseEntity<Vocabulary> result = restTemplate.getForEntity(vocabularyWithId(vocabularyId), Vocabulary.class);
+		Vocabulary vocab = result.getBody();
+
+		assertAll(
+				() -> assertNotNull(vocab),
+				() -> assertTrue(vocabularyContainsEntry(vocab, e.getBody())));
+	}
+
+	@Test
+	public void testAddPhraseToVocabulary_MalformedId() throws URISyntaxException {
+
+		URI uri = new URI(String.format("http://localhost:%d/vocab/%s/add", randomServerPort, "nonsense-id"));
+
+		assertThrows(HttpClientErrorException.BadRequest.class,
+				() ->restTemplate.postForEntity(uri, createRandomEntryEntity(), Object.class));
+	}
+
+	private HttpEntity<Vocabulary> createVocabularyEntity(String vocabularyName) {
 		Vocabulary vocab = new Vocabulary(
 				null,
 				vocabularyName,
@@ -117,11 +143,16 @@ public class VocabularyControllerTests {
 		return new HttpEntity<>(vocab);
 	}
 
-	private URI VocabularyWithId(int id) throws URISyntaxException {
+	private HttpEntity<Entry> createRandomEntryEntity() {
+		Entry e = new Entry(getRandomString(), getRandomString());
+		return new HttpEntity<>(e);
+	}
+
+	private URI vocabularyWithId(int id) throws URISyntaxException {
 		return new URI(String.format("http://localhost:%d/vocab/%d", randomServerPort, id));
 	}
 
-	private URI VocabBaseURI() throws URISyntaxException {
+	private URI vocabBaseURI() throws URISyntaxException {
 		return new URI(String.format("http://localhost:%d/vocab/", randomServerPort));
 	}
 }

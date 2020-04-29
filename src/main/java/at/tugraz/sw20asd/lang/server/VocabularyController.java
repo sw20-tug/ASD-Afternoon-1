@@ -1,5 +1,6 @@
 package at.tugraz.sw20asd.lang.server;
 
+import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import at.tugraz.sw20asd.lang.service.VocabularyDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +42,32 @@ public class VocabularyController {
         return ResponseEntity.ok().body(_vocabularyDao.findAll());
     }
 
-    @GetMapping(path="/{idString}")
+    @GetMapping(path = "/{idString}")
     public ResponseEntity<Object> getVocabularyById(@PathVariable String idString) {
+        int id;
+        try {
+            id = Integer.parseInt(idString);
+        } catch (NumberFormatException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+        Vocabulary result = _vocabularyDao.findById(id);
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping(path="/{idString}/add")
+    public ResponseEntity<Object> addEntryToVocabulary(@PathVariable String idString, @RequestBody Entry entry) {
         int id;
         try {
             id = Integer.parseInt(idString);
         } catch(NumberFormatException ex) {
             return ResponseEntity.badRequest().build();
         }
-        Vocabulary result = _vocabularyDao.findById(id);
-        if(result == null) {
-            return ResponseEntity.notFound().build();
+        if(_vocabularyDao.addEntryToVocabulary(id, entry)) {
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.notFound().build();
     }
 }

@@ -46,6 +46,19 @@ public class VocabularyControllerTestConfiguration {
         doAnswer(inv ->
                 vocabularies.get(inv.getArgument(0))).when(mock).findById(anyInt());
 
+        // addEntryToVocabulary
+        doAnswer(inv -> {
+            int vocabIndex = (int)inv.getArguments()[0];
+            Entry e = (Entry)inv.getArguments()[1];
+            var v = vocabularies.get(vocabIndex);
+            if(v == null || e == null) {
+                return false;
+            }
+            v.addPhrase(e);
+            return true;
+
+        }).when(mock).addEntryToVocabulary(anyInt(), any(Entry.class));
+
         return mock;
     }
 
