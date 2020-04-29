@@ -30,6 +30,9 @@ public class OverviewVocabs extends VBox {
 
     private VocabularyAccess vocab;
 
+    String jsonFilesFolder = System.getProperty("user.dir") + "/vocabs";
+
+
 
     public OverviewVocabs(VocabularyAccess vocab) {
         this.vocab = vocab;
@@ -48,7 +51,7 @@ public class OverviewVocabs extends VBox {
 
     public void initialize() {
 
-        int num_but = new File("C:\\Users\\juan\\Desktop\\ASD-Afternoon-1\\vocabs").list().length;
+        int num_but = new File(jsonFilesFolder).list().length;
         for (int i = 0; i < num_but; i++) {
             Button b = new Button("b" + String.valueOf(i));
             b.setId("b" + String.valueOf(i));
