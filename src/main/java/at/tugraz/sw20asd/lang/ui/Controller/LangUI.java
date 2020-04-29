@@ -15,15 +15,25 @@ public class LangUI extends Application {
         launch(args);
     }
 
+    private Parent root;
+    private Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Vocabulary Trainer");
 
-        final Parent root = new Controller();
-        final Scene scene = new Scene(root);
+        root = new Controller();
+        scene = new Scene(root);
         stage.setScene(scene);
 
         stage.show();
+    }
+    //testing reasons
+    public Parent getRoot(){
+        return this.root;
+    }
+
+    public Scene getScene(){
+        return this.scene;
     }
 }

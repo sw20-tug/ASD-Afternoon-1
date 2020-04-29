@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -56,23 +57,23 @@ public class AddVocab extends VBox {
     private ObservableList<String> vocabulary_list = FXCollections.observableArrayList();
     private HashMap<String, Locale> language_map = new HashMap<String, Locale>();
     private int id;
-
+    FXMLLoader loader = new FXMLLoader();
 
     public AddVocab(VocabularyAccess vocab){
 
         this.vocab = vocab;
-
-        FXMLLoader loader = new FXMLLoader();
+        URL location = getClass().getResource("/add.fxml");
         loader.setControllerFactory(c -> this);
         loader.setRoot(this);
         try {
-            loader.load(getClass().getResource("/add.fxml").openStream());
+            loader.load(location.openStream());
 
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
 
     }
+
 
     public void initialize(){
 
@@ -176,8 +177,8 @@ public class AddVocab extends VBox {
                 }
                 else{
                     sendAddCommand();
-
-
+                    //TODO: should be at JavaFx Task
+                    clearAddVocab();
                 }
             }
         });
@@ -262,7 +263,6 @@ public class AddVocab extends VBox {
                 if(id != -1){
                     Platform.runLater(() -> {
                         updateUserInformation("added_vocab");
-                        clearAddVocab();
                     });
                 }
                 else{
@@ -316,6 +316,7 @@ public class AddVocab extends VBox {
 
     }
 
+
     private boolean checkEntries(){
         if((!from_field.getText().isEmpty() && to_field.getText().isEmpty()) ||
                 (from_field.getText().isEmpty() && !to_field.getText().isEmpty())){
@@ -342,6 +343,22 @@ public class AddVocab extends VBox {
         }
         return  true;
     }
+
+    //TODO find failure in shorter version
+//    private boolean checkText_ExclusiveOr(TextField tf1, TextField tf2) {
+//            return !(tf1.getText().isEmpty() && tf2.getText().isEmpty())
+//                    || (tf1.getText().isEmpty() && !tf2.getText().isEmpty());
+//    }
+//
+//    private boolean checkEntries(){
+//        return checkText_ExclusiveOr(from_field, to_field)
+//                && checkText_ExclusiveOr(from_field1, to_field1)
+//                && checkText_ExclusiveOr(from_field2, to_field2)
+//                && checkText_ExclusiveOr(from_field3, to_field3)
+//                && checkText_ExclusiveOr(from_field4, to_field4)
+//                && checkText_ExclusiveOr(from_field5, to_field5);
+//    }
+
 
     private void clearAddVocab(){
         from_choice.getSelectionModel().clearSelection();
