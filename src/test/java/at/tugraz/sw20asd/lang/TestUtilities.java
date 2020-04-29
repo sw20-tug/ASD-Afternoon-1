@@ -1,8 +1,5 @@
 package at.tugraz.sw20asd.lang;
 
-import at.tugraz.sw20asd.lang.model.Entry;
-import at.tugraz.sw20asd.lang.model.Vocabulary;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,19 +50,5 @@ public class TestUtilities {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public static boolean vocabularyContainsEntry(Vocabulary v, Entry e) {
-        if(v.getEntries() == null) {
-            return false;
-        }
-
-        for (Entry entry : v.getEntries()) {
-            if(entry.getPhrase().equals(e.getPhrase())
-                    && entry.getTranslation().equals(e.getTranslation())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

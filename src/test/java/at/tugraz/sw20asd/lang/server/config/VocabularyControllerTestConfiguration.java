@@ -4,7 +4,6 @@ import at.tugraz.sw20asd.lang.TestUtilities;
 import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import at.tugraz.sw20asd.lang.service.VocabularyDAO;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,19 +45,6 @@ public class VocabularyControllerTestConfiguration {
         // findById
         doAnswer(inv ->
                 vocabularies.get(inv.getArgument(0))).when(mock).findById(anyInt());
-
-        // addEntryToVocabulary
-        doAnswer(inv -> {
-            int vocabIndex = (int)inv.getArguments()[0];
-            Entry e = (Entry)inv.getArguments()[1];
-            var v = vocabularies.get(vocabIndex);
-            if(v == null || e == null) {
-                return false;
-            }
-            v.addPhrase(e);
-            return true;
-
-        }).when(mock).addEntryToVocabulary(anyInt(), any(Entry.class));
 
         return mock;
     }

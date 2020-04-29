@@ -1,6 +1,5 @@
 package at.tugraz.sw20asd.lang.service;
 
-import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -70,24 +69,6 @@ public class VocabularyDAOFileImpl implements VocabularyDAO {
 
         _nextFreeIndex++;
         return vocabularyIndex;
-    }
-
-    @Override
-    public boolean addEntryToVocabulary(int vocabId, Entry e) {
-        if(e == null) {
-            return false;
-        }
-
-        var vocab = _vocabularies.get(vocabId);
-        if(vocab == null) {
-            return false;
-        }
-
-        vocab.addPhrase(e);
-
-        serializeVocabularyToFile(vocab);
-        _vocabularies.put(vocabId, vocab);
-        return true;
     }
 
     private Vocabulary readVocabularyFromFile(File file) {
