@@ -34,6 +34,14 @@
             <Insets />
         </opaqueInsets>
     </Button>
+    <Button fx:id="edit_btn" prefHeight="60.0" prefWidth="373.0" text="Edit Vocabuary">
+        <font>
+            <Font name="Abyssinica SIL" size="16.0" />
+        </font>
+        <VBox.margin>
+            <Insets top="10.0" />
+        </VBox.margin>
+    </Button>
     <Button fx:id="train_btn" prefHeight="60.0" prefWidth="373.0" text="Vocabulary Trainer">
         <font>
             <Font name="Abyssinica SIL" size="16.0" />
