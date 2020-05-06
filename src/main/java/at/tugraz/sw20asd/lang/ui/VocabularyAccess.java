@@ -9,7 +9,7 @@ public interface VocabularyAccess {
 
     Integer addVocabulary(Vocabulary vocabulary);
 
-    Vocabulary getVocabulary(int id);
+    Vocabulary getVocabulary(long id);
 
     Collection<Vocabulary> getAllVocabularies();
 }

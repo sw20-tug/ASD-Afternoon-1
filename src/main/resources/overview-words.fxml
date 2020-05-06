@@ -33,6 +33,11 @@
             <Line endX="171.1016387939453" endY="-0.8284531831741333" layoutX="232.0" layoutY="128.0" startX="-180.19125366210938" startY="-0.8284209966659546" strokeMiterLimit="20.0" />
 
             <TableView fx:id="table" layoutX="50.0" layoutY="140.0" prefWidth="350.0" prefHeight="250.0">
+                <columns>
+                    <TableColumn fx:id="phraseColumn" prefWidth="175.0" text="PHRASE" />
+                    <TableColumn fx:id="translationColumn" prefWidth="175.0" text="TRANSLATION" />
+                </columns>
+
                 <TableCell>
                     <font>
                         <Font name="Abyssinica SIL" size="12.0" />

@@ -1,3 +1,4 @@
+package at.tugraz.sw20asd.lang.ui.Controller;
 
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccessRestImpl;

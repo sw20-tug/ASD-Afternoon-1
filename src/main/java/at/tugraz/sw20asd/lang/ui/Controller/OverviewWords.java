@@ -2,24 +2,25 @@ package at.tugraz.sw20asd.lang.ui.Controller;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-
+import at.tugraz.sw20asd.lang.ui.models.EntryModel;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import at.tugraz.sw20asd.lang.model.Entry;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import java.util.stream.Collectors;
 
 public class OverviewWords extends VBox {
 
+    private final Integer index;
     @FXML
     private Label title;
     @FXML
@@ -28,63 +29,51 @@ public class OverviewWords extends VBox {
     private Button edit_btn;
     @FXML
     private Button return_btn;
+
     @FXML
-    private TableView<String> table;
+    public TableColumn<EntryModel, String> phraseColumn;
+
+    @FXML
+    public TableColumn<EntryModel, String> translationColumn;
+
+    @FXML
+    private TableView<EntryModel> table;
 
     private VocabularyAccess vocab;
-    private ArrayList list;
-    String jsonFilesFolder = System.getProperty("user.dir") + "/vocabs";
 
-
-    public OverviewWords(VocabularyAccess vocab, ArrayList list){
-        this.list = list;
+    public OverviewWords(VocabularyAccess vocab, Integer index) {
         this.vocab = vocab;
+        this.index = index;
         FXMLLoader loader = new FXMLLoader();
         loader.setControllerFactory(c -> this);
         loader.setRoot(this);
         try {
-            loader.load(getClass().getResource("/overviewwords.fxml").openStream());
+            loader.load(getClass().getResource("/overview-words.fxml").openStream());
 
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
-    public void initialize(){
-        String SourceLanguage = "";
-        String TargetLanguage= "";
-        JSONParser jsonParser = new JSONParser();
-        for (int x = 0; x < list.size(); x++){
-            try (FileReader reader = new FileReader(jsonFilesFolder + "/"+ list.get(x) + ".vocab"))
-            {
-                //Read JSON file
-                Object obj = jsonParser.parse(reader);
 
-                JSONObject json = (JSONObject) obj;
+    public void initialize() {
+        Vocabulary v = vocab.getVocabulary(index);
 
+        phraseColumn.setText(v.getSourceLanguage().toString());
+        translationColumn.setText(v.getTargetLanguage().toString());
 
-                SourceLanguage = parseSourceLanguageObject(json);
-                TargetLanguage = parseTargetLanguageObject(json);
+        phraseColumn.setCellValueFactory(new PropertyValueFactory<>("Phrase"));
+        translationColumn.setCellValueFactory(new PropertyValueFactory<>("Translation"));
 
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-    }
-
-
-        TableColumn sourceLanguage = new TableColumn(SourceLanguage);
-        TableColumn targetLanguage = new TableColumn(TargetLanguage);
-        table.getColumns().addAll(sourceLanguage, targetLanguage);
-
-
-
+        table.setItems(FXCollections.observableArrayList(
+                v.getEntries()
+                        .stream()
+                        .map(EntryModel::fromEntry).collect(Collectors.toList())));
 
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
-                    AddVocab add = new AddVocab(vocab);
-                    getScene().setRoot(add);
-
+                AddVocab add = new AddVocab(vocab);
+                getScene().setRoot(add);
             }
         });
 
@@ -102,22 +91,5 @@ public class OverviewWords extends VBox {
                 getScene().setRoot(vocab_menu);
             }
         });
-
-    }
-
-    private static String parseSourceLanguageObject(JSONObject vocab)
-    {
-
-        String SourceLanguage = (String) vocab.get("sourceLanguage");
-
-        return SourceLanguage;
-    }
-
-    private static String parseTargetLanguageObject(JSONObject vocab)
-    {
-
-        String TargetLanguage = (String) vocab.get("targetLanguage");
-
-        return TargetLanguage;
     }
 }

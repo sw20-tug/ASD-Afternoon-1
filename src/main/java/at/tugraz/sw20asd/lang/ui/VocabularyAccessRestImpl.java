@@ -1,9 +1,13 @@
 package at.tugraz.sw20asd.lang.ui;
 
 import at.tugraz.sw20asd.lang.model.Vocabulary;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,12 +55,38 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public Vocabulary getVocabulary(int id) {
-        return null;
+    public Vocabulary getVocabulary(long id) {
+        try
+        {
+            ResponseEntity<Vocabulary> response = restTemplate.getForEntity(vocabularyWithId(id), Vocabulary.class);
+
+            if(!response.getStatusCode().equals(HttpStatus.OK)
+                    || !response.hasBody()) {
+                return null;
+            }
+
+            return response.getBody();
+        } catch(URISyntaxException ex) {
+            return null;
+        }
+    }
+
+    private URI vocabularyWithId(long id) throws URISyntaxException {
+        return new URI(String.format("%s%d", uri.toString(), id));
     }
 
     @Override
     public Collection<Vocabulary> getAllVocabularies() {
-        return null;
+        ResponseEntity<List<Vocabulary>> response = restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Vocabulary>>() {
+                });
+        if(!response.getStatusCode().equals(HttpStatus.OK)
+                || !response.hasBody()) {
+            return null;
+        }
+        return response.getBody();
     }
 }
