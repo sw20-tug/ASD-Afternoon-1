@@ -13,17 +13,7 @@ import java.util.Locale;
 
 public class GUIController {
 
-//    private VocabularyAccess vocabAcc;
-//
-//    public GUIController(VocabularyAccess vocabAcc){
-//        this.vocabAcc = vocabAcc;
-//    }
-
     public static void main(String[] args){
-
-
         LangUI.main(args);
     }
-
-
 }

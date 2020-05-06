@@ -20,23 +20,10 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.util.concurrent.TimeoutException;
 
 @ExtendWith(ApplicationExtension.class)
-class AddVocabTest {
+class AddVocabTest extends GuiExtend {
 
-    FXMLLoader loader = new FXMLLoader();
     private VocabularyAccess vocab;
 
-    @BeforeAll
-    public static void setup() throws Exception {
-
-        //only for git action to work
-        //use "if-statement" if you want to see Application tests not headless
-//        if (Boolean.getBoolean("headless")) {
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-//        }
-    }
     @Start
     public void start(Stage stage) throws Exception {
         vocab = new VocabularyAccessRestImpl("localhost", 8080);
