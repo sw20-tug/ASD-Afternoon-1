@@ -175,10 +175,8 @@ public class AddVocab extends VBox {
                 {
                     updateUserInformation("entry_missing");
                 }
-                else{
+                else {
                     sendAddCommand();
-                    //TODO: should be at JavaFx Task
-                    clearAddVocab();
                 }
             }
         });
@@ -259,11 +257,11 @@ public class AddVocab extends VBox {
             }
             if(newState == Worker.State.SUCCEEDED){
                 id = addtask.getValue();
-
                 if(id != -1){
                     Platform.runLater(() -> {
                         updateUserInformation("added_vocab");
                     });
+                    clearAddVocab();
                 }
                 else{
                     Platform.runLater(() -> {
@@ -316,49 +314,27 @@ public class AddVocab extends VBox {
 
     }
 
-
-    private boolean checkEntries(){
-        if((!from_field.getText().isEmpty() && to_field.getText().isEmpty()) ||
-                (from_field.getText().isEmpty() && !to_field.getText().isEmpty())){
-            return false;
-        }
-        else if((!from_field1.getText().isEmpty() && to_field1.getText().isEmpty()) ||
-                (from_field1.getText().isEmpty() && !to_field1.getText().isEmpty())){
-            return false;
-        }
-        else if((!from_field2.getText().isEmpty() && to_field2.getText().isEmpty()) ||
-                (from_field2.getText().isEmpty() && !to_field2.getText().isEmpty())){
-            return false;
-        }
-        else if((!from_field3.getText().isEmpty() && to_field3.getText().isEmpty()) ||
-                (from_field3.getText().isEmpty() && !to_field3.getText().isEmpty())){
-            return false;
-        }
-        else if((!from_field4.getText().isEmpty() && to_field4.getText().isEmpty()) ||
-                (from_field4.getText().isEmpty() && !to_field4.getText().isEmpty())){
-            return false;
-        }else if((!from_field5.getText().isEmpty() && to_field5.getText().isEmpty()) ||
-                (from_field5.getText().isEmpty() && !to_field5.getText().isEmpty())){
-            return false;
-        }
-        return  true;
+    private boolean checkText_ExclusiveOr(TextField tf1, TextField tf2) {
+        return ((!tf1.getText().isEmpty() && tf2.getText().isEmpty())
+                || (tf1.getText().isEmpty() && !tf2.getText().isEmpty()));
     }
 
-    //TODO find failure in shorter version
-//    private boolean checkText_ExclusiveOr(TextField tf1, TextField tf2) {
-//            return !(tf1.getText().isEmpty() && tf2.getText().isEmpty())
-//                    || (tf1.getText().isEmpty() && !tf2.getText().isEmpty());
-//    }
-//
-//    private boolean checkEntries(){
-//        return checkText_ExclusiveOr(from_field, to_field)
-//                && checkText_ExclusiveOr(from_field1, to_field1)
-//                && checkText_ExclusiveOr(from_field2, to_field2)
-//                && checkText_ExclusiveOr(from_field3, to_field3)
-//                && checkText_ExclusiveOr(from_field4, to_field4)
-//                && checkText_ExclusiveOr(from_field5, to_field5);
-//    }
+    private boolean checkEntries(){
+        if(checkText_ExclusiveOr(from_field, to_field))
+            return false;
+        if(checkText_ExclusiveOr(from_field1, to_field1))
+            return false;
+        if(checkText_ExclusiveOr(from_field2, to_field2))
+            return false;
+        if(checkText_ExclusiveOr(from_field3, to_field3))
+            return false;
+        if(checkText_ExclusiveOr(from_field4, to_field4))
+            return false;
+        if(checkText_ExclusiveOr(from_field5, to_field5))
+            return false;
 
+        return true;
+    }
 
     private void clearAddVocab(){
         from_choice.getSelectionModel().clearSelection();
