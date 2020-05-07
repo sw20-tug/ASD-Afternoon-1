@@ -5,16 +5,14 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
-import org.testfx.api.FxToolkit;
 
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.control.LabeledMatchers;
 
-import java.util.concurrent.TimeoutException;
 
 @ExtendWith(ApplicationExtension.class)
-class LangUITest extends GuiExtend {
+class LangUITest extends LangUiTestBase {
     private Stage prim;
     private LangUI main;
 
@@ -23,12 +21,6 @@ class LangUITest extends GuiExtend {
         prim = stage;
         main = new LangUI();
         main.start(stage);
-    }
-
-    @AfterEach
-    public void stop() throws TimeoutException {
-        FxToolkit.cleanupStages();
-        FxToolkit.hideStage();
     }
 
     @Test

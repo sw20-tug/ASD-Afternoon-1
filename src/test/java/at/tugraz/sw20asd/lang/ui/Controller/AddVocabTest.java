@@ -1,26 +1,21 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccessRestImpl;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.control.LabeledMatchers;
 import org.testfx.util.WaitForAsyncUtils;
 
-import java.util.concurrent.TimeoutException;
 
 @ExtendWith(ApplicationExtension.class)
-class AddVocabTest extends GuiExtend {
+class AddVocabTest extends LangUiTestBase {
 
     private VocabularyAccess vocab;
 
@@ -31,11 +26,6 @@ class AddVocabTest extends GuiExtend {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-    }
-
-    @AfterEach
-    public void stop() throws TimeoutException {
-        FxToolkit.cleanupStages();
     }
 
     @Test

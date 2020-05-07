@@ -25,4 +25,6 @@ jobs:
     - name: Maven Package
       run: mvn -B clean package -DskipTests
     - name: Maven Verify
-      run: mvn -B clean verify -Pheadless=true
+      run: mvn -B clean verify -DargLine=\"$HEADLESS_TESTFX\"
+        env:
+          HEADLESS_TESTFX: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dglass.platform=Monocle -Dmonocle.platform=Headless -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -Dprism.verbose=true"
