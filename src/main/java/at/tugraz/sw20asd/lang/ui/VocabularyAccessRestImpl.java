@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class VocabularyAccessRestImpl implements VocabularyAccess {
@@ -28,30 +29,25 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     @Override
     public Integer addVocabulary(Vocabulary vocabulary) {
 
-        int id = 0;
+        int id = -1;
         String buffer = null;
+        String parse = null;
 
         HttpEntity<Vocabulary> request = new HttpEntity<>(vocabulary);
 
         ResponseEntity<Object> result = restTemplate.postForEntity(uri, request, Object.class);
 
         if(!(result.getHeaders().containsKey("Location")))
-            return null;
-
-        List<String> list = result.getHeaders().getOrEmpty("Location");
-        Optional<String> firstElement = list.stream().findFirst();
-
-
-        if(firstElement.isEmpty())
-            return null;
-        else{
-            buffer = firstElement.get();
-            String temp = buffer.substring(buffer.lastIndexOf('/'));
-            temp = temp.split("/")[1];
-            id = Integer.parseInt(temp);
             return id;
-        }
 
+         parse = Objects.requireNonNull(result.getHeaders().getLocation()).getPath();
+
+        if(!parse.isEmpty()){
+            buffer = parse.substring(parse.lastIndexOf('/'));
+            parse = buffer.split("/")[1];
+            id = Integer.parseInt(parse);
+        }
+        return id;
     }
 
     @Override
