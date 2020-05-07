@@ -4,6 +4,7 @@ import at.tugraz.sw20asd.lang.model.Vocabulary;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 
@@ -15,6 +16,9 @@ import java.io.*;
 public class OverviewVocabs extends VBox {
 
     private VocabularyAccess vocab;
+
+    @FXML
+    private Button return_btn;
 
     public OverviewVocabs(VocabularyAccess vocab) {
         this.vocab = vocab;
@@ -30,6 +34,7 @@ public class OverviewVocabs extends VBox {
     }
 
     public void initialize() {
+
         for (Vocabulary v : vocab.getAllVocabularies()) {
             Button b = new Button("b" + v.getID());
             b.setId("b" + v.getID());
@@ -48,6 +53,16 @@ public class OverviewVocabs extends VBox {
                 }
             });
             getChildren().add(b);
+
+
         }
+        return_btn.setOnAction(new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent event) {
+                Controller vocab_menu = new Controller();
+                getScene().setRoot(vocab_menu);
+            }
+        });
+
     }
 }
