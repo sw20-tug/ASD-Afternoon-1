@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/vocab")
@@ -38,7 +39,7 @@ public class VocabularyController {
     }
 
     @GetMapping(path = "/")
-    public ResponseEntity<Object> getAllVocabularies() {
+    public ResponseEntity<Collection<Vocabulary>> getAllVocabularies() {
         return ResponseEntity.ok().body(_vocabularyDao.findAll());
     }
 
