@@ -4,6 +4,7 @@ package at.tugraz.sw20asd.lang.ui;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface VocabularyAccess {
 
@@ -11,5 +12,6 @@ public interface VocabularyAccess {
 
     Vocabulary getVocabulary(long id);
 
-    Collection<Vocabulary> getAllVocabularies();
+    List<Vocabulary> getAllVocabularies();
+
 }

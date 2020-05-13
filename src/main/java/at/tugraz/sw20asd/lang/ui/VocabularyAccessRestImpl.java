@@ -44,7 +44,7 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
         if(!(result.getHeaders().containsKey("Location")))
             return id;
 
-         parse = Objects.requireNonNull(result.getHeaders().getLocation()).getPath();
+        parse = Objects.requireNonNull(result.getHeaders().getLocation()).getPath();
 
         if(!parse.isEmpty()){
             buffer = parse.substring(parse.lastIndexOf('/'));
@@ -76,7 +76,7 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public Collection<Vocabulary> getAllVocabularies() {
+    public List<Vocabulary> getAllVocabularies() {
         ResponseEntity<List<Vocabulary>> response = restTemplate.exchange(
                 uri,
                 HttpMethod.GET,
