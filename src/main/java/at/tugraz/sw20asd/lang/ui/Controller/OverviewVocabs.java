@@ -1,6 +1,6 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
 
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -26,8 +26,8 @@ public class OverviewVocabs extends VBox {
 
     private VocabularyAccess vocab;
 
-    private Task<List<Vocabulary>> getAllVocabsTask;
-    private List<Vocabulary> Vocabularies;
+    private Task<List<VocabularyBaseDto>> getAllVocabsTask;
+    private List<VocabularyBaseDto> Vocabularies;
 
     @FXML
     private Button return_btn;
@@ -84,7 +84,7 @@ public class OverviewVocabs extends VBox {
         int finalCurrent_size = index;
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                OverviewWords overview = new OverviewWords(vocab, Vocabularies.get(finalCurrent_size).getID());
+                OverviewWords overview = new OverviewWords(vocab, Vocabularies.get(finalCurrent_size).getId());
                 getScene().setRoot(overview);
             }
         });
@@ -140,7 +140,7 @@ public class OverviewVocabs extends VBox {
         //get Vocabularies
         getAllVocabsTask = new Task<>() {
             @Override
-            protected List<Vocabulary> call() throws Exception {
+            protected List<VocabularyBaseDto> call() throws Exception {
                 Vocabularies = vocab.getAllVocabularies();
                 return Vocabularies;
             }

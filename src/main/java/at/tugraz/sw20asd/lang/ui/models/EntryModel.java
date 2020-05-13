@@ -1,6 +1,6 @@
 package at.tugraz.sw20asd.lang.ui.models;
 
-import at.tugraz.sw20asd.lang.model.Entry;
+import at.tugraz.sw20asd.lang.dto.EntryDto;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -9,7 +9,7 @@ public class EntryModel {
     private SimpleStringProperty phrase;
     private SimpleStringProperty translation;
 
-    public static EntryModel fromEntry(Entry e) {
+    public static EntryModel fromEntry(EntryDto e) {
         EntryModel em = new EntryModel();
         em.setPhrase(e.getPhrase());
         em.setTranslation(e.getTranslation());

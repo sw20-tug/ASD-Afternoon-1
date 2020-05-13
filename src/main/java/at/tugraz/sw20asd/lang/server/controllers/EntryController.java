@@ -4,10 +4,8 @@ import at.tugraz.sw20asd.lang.dto.EntryDto;
 import at.tugraz.sw20asd.lang.server.services.IEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/entry")
@@ -34,5 +32,23 @@ public class EntryController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping(path= "/")
+    public ResponseEntity<?> editEntry(@RequestBody EntryDto entry) {
+        if(!validateDto(entry)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(!_entryService.updateEntry(entry)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    private boolean validateDto(EntryDto e) {
+        return e.getId() != null
+                && e.getPhrase() != null
+                && e.getTranslation() != null;
     }
 }

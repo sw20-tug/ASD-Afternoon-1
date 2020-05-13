@@ -2,6 +2,7 @@ package at.tugraz.sw20asd.lang.ui;
 
 import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
 import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -54,10 +55,10 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public Vocabulary getVocabulary(long id) {
+    public VocabularyDetailDto getVocabulary(long id) {
         try
         {
-            ResponseEntity<Vocabulary> response = restTemplate.getForEntity(vocabularyWithId(id), Vocabulary.class);
+            ResponseEntity<VocabularyDetailDto> response = restTemplate.getForEntity(vocabularyWithId(id), VocabularyDetailDto.class);
 
             if(!response.getStatusCode().equals(HttpStatus.OK)
                     || !response.hasBody()) {
@@ -75,12 +76,12 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public List<Vocabulary> getAllVocabularies() {
-        ResponseEntity<List<Vocabulary>> response = restTemplate.exchange(
+    public List<VocabularyBaseDto> getAllVocabularies() {
+        ResponseEntity<List<VocabularyBaseDto>> response = restTemplate.exchange(
                 uri,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<Vocabulary>>() {
+                new ParameterizedTypeReference<List<VocabularyBaseDto>>() {
                 });
         if(!response.getStatusCode().equals(HttpStatus.OK)
                 || !response.hasBody()) {

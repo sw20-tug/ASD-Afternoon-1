@@ -11,10 +11,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static at.tugraz.sw20asd.lang.util.TestUtilities.getRandomString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +43,7 @@ public class EntryControllerTests {
 
     @Test
     public void testGetEntryById_ReturnsEntry() {
-        EntryDto e = new EntryDto(getRandomString(15), getRandomString(15));
+        EntryDto e = getRandomEntry();
 
         when(entryService.findById(anyLong())).thenReturn(e);
 
@@ -50,5 +52,60 @@ public class EntryControllerTests {
                 () -> assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK),
                 () -> assertThat(responseEntity.getBody()).isEqualTo(e)
         );
+    }
+
+    @Test
+    public void testEditEntry_RejectsEntryWithNullId() {
+        EntryDto e = getRandomEntry();
+        e.setId(null);
+
+        ResponseEntity<?> responseEntity = entryController.editEntry(e);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void testEditEntry_RejectsEntryWithNullPhrase() {
+        EntryDto e = getRandomEntry();
+        e.setPhrase(null);
+
+        ResponseEntity<?> responseEntity = entryController.editEntry(e);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void testEditEntry_RejectsEntryWithNullTranslation() {
+        EntryDto e = getRandomEntry();
+        e.setTranslation(null);
+
+        ResponseEntity<?> responseEntity = entryController.editEntry(e);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void testEditEntry_ReturnsNotFoundWhenServiceReturnsFalse() {
+        ResponseEntity<?> responseEntity = entryController.editEntry(getRandomEntry());
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void testEditEntry_ReturnsOk() {
+        when(entryService.updateEntry(any(EntryDto.class))).thenReturn(true);
+
+        ResponseEntity<?> responseEntity = entryController.editEntry(getRandomEntry());
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    private EntryDto getRandomEntry() {
+        EntryDto tmp = new EntryDto();
+        tmp.setId(4L); // chosen by fair dice roll. guaranteed to be random. (https://xkcd.com/221/)
+        tmp.setPhrase(getRandomString(15));
+        tmp.setTranslation(getRandomString(12));
+
+        return tmp;
     }
 }

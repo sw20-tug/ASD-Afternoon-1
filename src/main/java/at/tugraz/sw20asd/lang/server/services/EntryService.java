@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +28,8 @@ public class EntryService implements IEntryService {
 
     @Override
     public EntryDto findById(Long id) {
-        return null;
+        Optional<Entry> optVocab = _entryRepository.findById(id);
+        return optVocab.map(this::convertToDto).orElse(null);
     }
 
     @Override
@@ -38,8 +41,18 @@ public class EntryService implements IEntryService {
     }
 
     @Override
+    @Transactional
     public boolean updateEntry(EntryDto entry) {
-        return false;
+        Optional<Entry> entryOpt = _entryRepository.findById(entry.getId());
+        if(entryOpt.isEmpty()) {
+            return false;
+        }
+        Entry entity = entryOpt.get();
+        entity.setPhrase(entry.getPhrase());
+        entity.setTranslation(entry.getTranslation());
+
+        _entryRepository.save(entity);
+        return true;
     }
 
     private EntryDto convertToDto(Entry e) {

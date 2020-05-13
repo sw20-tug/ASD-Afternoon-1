@@ -1,6 +1,6 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
 
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.models.EntryModel;
 import javafx.application.Platform;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class OverviewWords extends VBox {
 
-    private final Integer index;
+    private final Long index;
     @FXML
     private Label title;
     @FXML
@@ -43,10 +43,10 @@ public class OverviewWords extends VBox {
     private TableView<EntryModel> table;
 
     private VocabularyAccess vocab;
-    private Task<Vocabulary> getVocabsTask;
-    private Vocabulary v;
+    private Task<VocabularyDetailDto> getVocabsTask;
+    private VocabularyDetailDto v;
 
-    public OverviewWords(VocabularyAccess vocab, Integer index) {
+    public OverviewWords(VocabularyAccess vocab, Long index) {
         this.vocab = vocab;
         this.index = index;
         FXMLLoader loader = new FXMLLoader();
@@ -107,7 +107,7 @@ public class OverviewWords extends VBox {
         //get Vocabulary group
         getVocabsTask = new Task<>() {
             @Override
-            protected Vocabulary call() throws Exception {
+            protected VocabularyDetailDto call() throws Exception {
                 v = vocab.getVocabulary(index);
                 return v;
             }
