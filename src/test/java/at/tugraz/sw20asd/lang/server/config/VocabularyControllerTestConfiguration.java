@@ -1,6 +1,6 @@
 package at.tugraz.sw20asd.lang.server.config;
 
-import at.tugraz.sw20asd.lang.TestUtilities;
+import at.tugraz.sw20asd.lang.util.TestUtilities;
 import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import at.tugraz.sw20asd.lang.service.VocabularyDAO;
@@ -52,7 +52,7 @@ public class VocabularyControllerTestConfiguration {
     private static Vocabulary getNewVocabulary(int id) {
         Vocabulary vocab = new Vocabulary(
                 id,
-                "My-Vocab-" + id + "__" + TestUtilities.getRandomString(),
+                "My-Vocab-" + id + "__" + TestUtilities.getRandomString(10),
                 Locale.GERMAN,
                 Locale.FRENCH);
         vocab.addPhrase(new Entry("foo", "bar"));

@@ -11,9 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import at.tugraz.sw20asd.lang.TestUtilities;
+import static at.tugraz.sw20asd.lang.util.TestUtilities.*;
 
-import static at.tugraz.sw20asd.lang.TestUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -91,7 +90,7 @@ public class VocabularyDAOTests {
 
         Vocabulary testVocabulary = new Vocabulary();
         testVocabulary.setId(vocabularyId);
-        testVocabulary.setName(TestUtilities.getRandomString());
+        testVocabulary.setName(getRandomString(25));
         testVocabulary.setSourceLanguage(Locale.FRENCH);
         testVocabulary.setTargetLanguage(Locale.CHINESE);
         return testVocabulary;

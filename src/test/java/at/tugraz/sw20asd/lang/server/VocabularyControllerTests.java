@@ -1,6 +1,6 @@
 package at.tugraz.sw20asd.lang.server;
 
-import at.tugraz.sw20asd.lang.TestUtilities;
+import at.tugraz.sw20asd.lang.util.TestUtilities;
 import at.tugraz.sw20asd.lang.model.Entry;
 import at.tugraz.sw20asd.lang.model.Vocabulary;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ public class VocabularyControllerTests {
 
 	@Test
 	public void testAddVocabulary() throws URISyntaxException {
-		HttpEntity<Vocabulary> request = CreateVocabularyEntity(TestUtilities.getRandomString());
+		HttpEntity<Vocabulary> request = CreateVocabularyEntity(TestUtilities.getRandomString(20));
 
 		ResponseEntity<Object> result = restTemplate.postForEntity(VocabBaseURI(), request, Object.class);
 
@@ -51,7 +51,7 @@ public class VocabularyControllerTests {
 		ResponseEntity<Vocabulary> result = restTemplate.getForEntity(VocabularyWithId(3), Vocabulary.class);
 		Vocabulary vocabularyBefore = result.getBody();
 
-		HttpEntity<Vocabulary> request = CreateVocabularyEntity(TestUtilities.getRandomString());
+		HttpEntity<Vocabulary> request = CreateVocabularyEntity(TestUtilities.getRandomString(20));
 
 		restTemplate.postForEntity(VocabBaseURI(), request, String.class);
 
