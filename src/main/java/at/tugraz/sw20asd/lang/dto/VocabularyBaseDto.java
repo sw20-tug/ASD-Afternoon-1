@@ -15,11 +15,9 @@ public class VocabularyBaseDto {
     private Locale _targetLanguage;
 
     public VocabularyBaseDto() {
-        super();
     }
 
-    public VocabularyBaseDto(long id, String name, Locale src, Locale dst) {
-        super();
+    public VocabularyBaseDto(Long id, String name, Locale src, Locale dst) {
         _id = id;
         _name = name;
         _sourceLanguage = src;

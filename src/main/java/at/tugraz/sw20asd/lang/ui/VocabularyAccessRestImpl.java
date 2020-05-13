@@ -1,7 +1,7 @@
 package at.tugraz.sw20asd.lang.ui;
 
-import at.tugraz.sw20asd.lang.model.Vocabulary;
-import org.springframework.core.ParameterizedTypeReference;
+import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,6 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     private URI uri;
 
     public VocabularyAccessRestImpl(String host, int port){
-
         try {
             uri = new URI(String.format("http://%s:%d/vocab/", host, port));
         } catch (URISyntaxException e) {
@@ -31,13 +30,13 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public Integer addVocabulary(Vocabulary vocabulary) {
+    public Integer addVocabulary(VocabularyDetailDto vocabulary) {
 
         int id = -1;
         String buffer = null;
         String parse = null;
 
-        HttpEntity<Vocabulary> request = new HttpEntity<>(vocabulary);
+        HttpEntity<VocabularyDetailDto> request = new HttpEntity<>(vocabulary);
 
         ResponseEntity<Object> result = restTemplate.postForEntity(uri, request, Object.class);
 
