@@ -61,6 +61,7 @@ public class OverviewWords extends VBox {
     }
 
     public void initialize() {
+        user_info.setVisible(false);
         getVocabsGroup();
 
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -114,7 +115,7 @@ public class OverviewWords extends VBox {
         };
 
         getVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.CANCELLED) {
+            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.CANCELLED ) {
                 Platform.runLater(() -> {
                     updateUserInformation("");
                 });
