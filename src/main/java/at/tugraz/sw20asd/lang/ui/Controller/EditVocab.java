@@ -29,10 +29,6 @@ public class EditVocab extends VBox {
     @FXML
     private VBox translation_list;
     @FXML
-    private Label from_label;
-    @FXML
-    private Label to_label;
-    @FXML
     private Button add_btn;
     @FXML
     private Button submit_btn;
@@ -49,13 +45,10 @@ public class EditVocab extends VBox {
     private VocabularyAccess vocab;
     private Vocabulary voc;
 
-    private String category_string;
-    private ObservableList<String> vocabulary_list = FXCollections.observableArrayList();
     private int id;
     FXMLLoader loader = new FXMLLoader();
 
     public EditVocab(VocabularyAccess vocab, Vocabulary voc){
-
         this.vocab = vocab;
         this.voc = voc;
         URL location = getClass().getResource("/edit.fxml");
@@ -67,7 +60,6 @@ public class EditVocab extends VBox {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
 
@@ -80,25 +72,35 @@ public class EditVocab extends VBox {
         {
             TextField phrase = new TextField();
             phrase.setText(words.get(counter).getPhrase());
-            phrase.textProperty().addListener((observable, oldValue, newValue) -> {
-                category_string = newValue;
-            });
+            phrase.textProperty().addListener((observable, oldValue, newValue) -> {});
             phrase_field_list.add(phrase);
             phrase_list.getChildren().add(phrase);
 
             TextField translation = new TextField();
             translation.setText(words.get(counter).getTranslation());
-            translation.textProperty().addListener((observable, oldValue, newValue) -> {
-                category_string = newValue;
-            });
-            translation_field_list.add(phrase);
+            translation.textProperty().addListener((observable, oldValue, newValue) -> {});
+            translation_field_list.add(translation);
             translation_list.getChildren().add(translation);
         }
 
-        category.textProperty().addListener((observable, oldValue, newValue) -> {
-            category_string = newValue;
+        add_btn.setOnAction(new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent event) {
+                TextField phrase = new TextField();
+                phrase.setText("");
+                phrase.textProperty().addListener((observable, oldValue, newValue) -> {});
+                phrase_field_list.add(phrase);
+                phrase_list.getChildren().add(phrase);
+
+                TextField translation = new TextField();
+                translation.setText("");
+                translation.textProperty().addListener((observable, oldValue, newValue) -> {});
+                translation_field_list.add(translation);
+                translation_list.getChildren().add(translation);
+            }
         });
 
+        category.textProperty().addListener((observable, oldValue, newValue) -> {});
 
         submit_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
@@ -111,35 +113,14 @@ public class EditVocab extends VBox {
                 }
                 else{
                     sendEditCommand();
+                    clearEditVocab();
                 }
             }
         });
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
-
             public void handle(ActionEvent event) {
                 clearEditVocab();
-                Controller con = new Controller();
-                getScene().setRoot(con);
-            }
-        });
-
-        add_btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            public void handle(ActionEvent event) {
-                TextField phrase = new TextField();
-                phrase.textProperty().addListener((observable, oldValue, newValue) -> {
-                    category_string = newValue;
-                });
-                phrase_field_list.add(phrase);
-                phrase_list.getChildren().add(phrase);
-
-                TextField translation = new TextField();
-                translation.textProperty().addListener((observable, oldValue, newValue) -> {
-                    category_string = newValue;
-                });
-                translation_field_list.add(phrase);
-                translation_list.getChildren().add(translation);
             }
         });
     }
@@ -171,20 +152,15 @@ public class EditVocab extends VBox {
     private void sendEditCommand(){
 
         user_info.setVisible(false);
-        int amount = getAmountOfEntries();
-        id = -1;
+        List<Entry> entry_list = getEntryList();
 
         Locale source_lang = voc.getSourceLanguage();
         Locale target_lang = voc.getTargetLanguage();
+        Vocabulary vocabulary = new Vocabulary(voc.getID(), category.getText(), source_lang, target_lang);
 
-        Vocabulary vocabulary = new Vocabulary(null, category_string, source_lang, target_lang);
-
-        for(int i = 0; (i + 1) < amount; i++)
+        for(int counter = 0; counter < entry_list.size(); counter++)
         {
-            String from = vocabulary_list.get(i);
-            String to = vocabulary_list.get(++i);
-            Entry entry = new Entry(from, to);
-            vocabulary.addPhrase(entry);
+            vocabulary.addPhrase(entry_list.get(counter));
         }
 
         edittask = new Task<Integer> () {
@@ -222,39 +198,32 @@ public class EditVocab extends VBox {
         th.start();
     }
 
-    private int getAmountOfEntries(){
-        int amount = 0;
-        // TODO
-        /*
-        if(!from_field.getText().isEmpty() && !to_field.getText().isEmpty()){
-            amount += 2;
-            vocabulary_list.addAll(from_string, to_string);
-        } */
-        return amount;
+    private List<Entry> getEntryList(){
+        List<Entry> entry_list = new ArrayList<>();
+        for(int counter = 0; counter < translation_field_list.size(); counter++)
+        {
+            if(!phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty()){
+                entry_list.add(new Entry(phrase_field_list.get(counter).getText(), translation_field_list.get(counter).getText()));
 
+                System.out.println(translation_field_list.get(counter).getText());
+            }
+        }
+        return entry_list;
     }
 
     private boolean checkEntries(){
-        // TODO
-        /*
-        if((!from_field.getText().isEmpty() && to_field.getText().isEmpty()) ||
-                (from_field.getText().isEmpty() && !to_field.getText().isEmpty())){
-            return false;
+        for(int counter = 0; counter < phrase_field_list.size(); counter++)
+        {
+            if((!phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty()) ||
+                    (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty())){
+                return false;
+            }
         }
-        */
-        return  true;
+        return true;
     }
 
     private void clearEditVocab(){
-        // TODO
-        /*
-        from_field.clear();
-        to_field.clear();
-         */
-        from_label.setText("From:");
-        to_label.setText("To:");
-
-        vocabulary_list.clear();
-        category.clear();
+        OverviewVocabs overview = new OverviewVocabs(vocab);
+        getScene().setRoot(overview);
     }
 }

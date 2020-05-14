@@ -22,6 +22,8 @@ public class Controller extends VBox {
     @FXML
     private Button train_btn;
     @FXML
+    private Button edit_btn;
+    @FXML
     private Button exit_btn;
 
     FXMLLoader loader = new FXMLLoader();
@@ -62,6 +64,13 @@ public class Controller extends VBox {
         train_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 System.out.println("vocab trainer");
+            }
+        });
+
+        edit_btn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                EditVocabSelection edit = new EditVocabSelection(vocab);
+                getScene().setRoot(edit);
             }
         });
 

@@ -75,7 +75,9 @@ public class OverviewWords extends VBox {
         edit_btn.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
-                System.out.println("Edit"); // pop ups to the edit screen
+                System.out.println("Edit");
+                //EditVocab edit = new EditVocab(vocab, TODO Pass vocabulary to edit);
+                //getScene().setRoot(edit);
             }
         });
 
