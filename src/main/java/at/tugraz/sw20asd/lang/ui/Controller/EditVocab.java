@@ -64,7 +64,6 @@ public class EditVocab extends VBox {
 
 
     public void initialize(){
-
         user_info.setVisible(false);
         category.setText(voc.getName());
         List<Entry> words = voc.getEntries();
@@ -72,13 +71,11 @@ public class EditVocab extends VBox {
         {
             TextField phrase = new TextField();
             phrase.setText(words.get(counter).getPhrase());
-            phrase.textProperty().addListener((observable, oldValue, newValue) -> {});
             phrase_field_list.add(phrase);
             phrase_list.getChildren().add(phrase);
 
             TextField translation = new TextField();
             translation.setText(words.get(counter).getTranslation());
-            translation.textProperty().addListener((observable, oldValue, newValue) -> {});
             translation_field_list.add(translation);
             translation_list.getChildren().add(translation);
         }
@@ -88,19 +85,16 @@ public class EditVocab extends VBox {
             public void handle(ActionEvent event) {
                 TextField phrase = new TextField();
                 phrase.setText("");
-                phrase.textProperty().addListener((observable, oldValue, newValue) -> {});
                 phrase_field_list.add(phrase);
                 phrase_list.getChildren().add(phrase);
 
                 TextField translation = new TextField();
                 translation.setText("");
-                translation.textProperty().addListener((observable, oldValue, newValue) -> {});
                 translation_field_list.add(translation);
                 translation_list.getChildren().add(translation);
             }
         });
 
-        category.textProperty().addListener((observable, oldValue, newValue) -> {});
 
         submit_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
@@ -113,14 +107,14 @@ public class EditVocab extends VBox {
                 }
                 else{
                     sendEditCommand();
-                    clearEditVocab();
                 }
             }
         });
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                clearEditVocab();
+                OverviewWords overview = new OverviewWords(vocab, voc.getID());
+                getScene().setRoot(overview);
             }
         });
     }
@@ -131,9 +125,6 @@ public class EditVocab extends VBox {
         switch (code){
             case "edited_vocab":
                 user_info.setText("Vocabulary edited!");
-                break;
-            case "missing_selection":
-                user_info.setText("Please select from and to language");
                 break;
             case "amount_missing":
                 user_info.setText("Please fill out the amount");
@@ -220,10 +211,5 @@ public class EditVocab extends VBox {
             }
         }
         return true;
-    }
-
-    private void clearEditVocab(){
-        OverviewVocabs overview = new OverviewVocabs(vocab);
-        getScene().setRoot(overview);
     }
 }
