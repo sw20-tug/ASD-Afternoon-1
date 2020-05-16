@@ -71,11 +71,13 @@ public class EditVocab extends VBox {
         {
             TextField phrase = new TextField();
             phrase.setText(words.get(counter).getPhrase());
+            phrase.setId("phrase" + phrase_field_list.size());
             phrase_field_list.add(phrase);
             phrase_list.getChildren().add(phrase);
 
             TextField translation = new TextField();
             translation.setText(words.get(counter).getTranslation());
+            translation.setId("translation" + translation_field_list.size());
             translation_field_list.add(translation);
             translation_list.getChildren().add(translation);
         }
@@ -85,11 +87,13 @@ public class EditVocab extends VBox {
             public void handle(ActionEvent event) {
                 TextField phrase = new TextField();
                 phrase.setText("");
+                phrase.setId("phrase" + phrase_field_list.size());
                 phrase_field_list.add(phrase);
                 phrase_list.getChildren().add(phrase);
 
                 TextField translation = new TextField();
                 translation.setText("");
+                translation.setId("translation" + translation_field_list.size());
                 translation_field_list.add(translation);
                 translation_list.getChildren().add(translation);
             }
@@ -106,7 +110,9 @@ public class EditVocab extends VBox {
                     updateUserInformation("entry_missing");
                 }
                 else{
+                    updateUserInformation("edited_vocab");
                     sendEditCommand();
+                    user_info.setVisible(true);
                 }
             }
         });
@@ -195,8 +201,6 @@ public class EditVocab extends VBox {
         {
             if(!phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty()){
                 entry_list.add(new Entry(phrase_field_list.get(counter).getText(), translation_field_list.get(counter).getText()));
-
-                System.out.println(translation_field_list.get(counter).getText());
             }
         }
         return entry_list;

@@ -37,24 +37,34 @@ class EditVocabTest extends LangUiTestBase {
         stage.setScene(scene);
         stage.show();
     }
-
+/*
     @Test
-    public void testAddInput(FxRobot robot) {
-        robot.clickOn("#category").write("");
+    public void testEdit(FxRobot robot) {
+        robot.clickOn("#category").write(""); // TODO How do i delete whats in there?
         WaitForAsyncUtils.waitForFxEvents(100);
         robot.clickOn("#submit_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
         FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please fill out the name of your Vocabulary group"));
     }
-
+*/
     @Test
-    public void testAddInput1(FxRobot robot) {
+    public void testEdit1(FxRobot robot) {
         robot.clickOn("#add_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
-        robot.clickOn("#from_field3").write("Hamster");
-        robot.clickOn("#to_field3").write("hamster");
+        robot.clickOn("#phrase3").write("Hamster");
+        robot.clickOn("#translation3").write("hamster");
         robot.clickOn("#submit_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
         FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Vocabulary edited!"));
+    }
+
+    @Test
+    public void testEdit2(FxRobot robot) {
+        robot.clickOn("#add_btn");
+        WaitForAsyncUtils.waitForFxEvents(100);
+        robot.clickOn("#phrase3").write("Hamster");
+        robot.clickOn("#submit_btn");
+        WaitForAsyncUtils.waitForFxEvents(100);
+        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please check if you have entered" + "\n" + "a matching To for each From in the same line"));
     }
 }
