@@ -37,8 +37,6 @@ public class EditVocabSelection extends VBox {
     private Button return_btn;
     @FXML
     private VBox button_list, delete_button_list;
-    @FXML
-    private Button b;  // TODO Only for testing
 
     private VocabularyAccess vocab;
 
@@ -67,22 +65,7 @@ public class EditVocabSelection extends VBox {
                 getScene().setRoot(con);
             }
         });
-
-        //TODO button b is just the test button
-        b.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                Locale src = Locale.GERMAN;
-                Locale dest = Locale.ENGLISH;
-                Vocabulary test1 = new Vocabulary(0,"MyVocab",src,dest);
-                test1.addPhrase(new Entry("hund","dog"));
-                test1.addPhrase(new Entry("katze","cat"));
-                test1.addPhrase(new Entry("fisch","fish"));
-                EditVocab edit = new EditVocab(vocab, test1);
-                getScene().setRoot(edit);
-            }
-        });
-
-        }
+    }
 
     private void getVocabs() {
         getAllVocabsTask = new Task<>() {
@@ -147,7 +130,7 @@ public class EditVocabSelection extends VBox {
             vocab_button.setText(Vocabularies.get(current_counter).getName());
             vocab_button.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter)); // TODO add vocabulary to parameters
+                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter));
                     getScene().setRoot(edit);
                 }
             });

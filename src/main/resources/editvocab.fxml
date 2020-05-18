@@ -32,7 +32,7 @@
 
         </children>
     </AnchorPane>
-   <ScrollPane hbarPolicy="NEVER" prefHeight="415.0" prefWidth="479.0" vbarPolicy="ALWAYS">
+   <ScrollPane hbarPolicy="NEVER" prefHeight="448.0" prefWidth="479.0" vbarPolicy="ALWAYS">
      <content>
        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="2000.0" prefWidth="461.0">
             <children>
@@ -42,6 +42,5 @@
          </AnchorPane>
      </content>
    </ScrollPane>
-   <Button fx:id="b" mnemonicParsing="false" text="Test Vocab" />
 
 </fx:root>

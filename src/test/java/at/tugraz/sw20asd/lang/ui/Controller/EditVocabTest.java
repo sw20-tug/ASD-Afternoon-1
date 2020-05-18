@@ -48,7 +48,7 @@ class EditVocabTest extends LangUiTestBase {
     }
 */
     @Test
-    public void testEdit1(FxRobot robot) {
+    public void testEdit1(FxRobot robot) { //TODO GIVES ERROR ON GIT
         robot.clickOn("#add_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
         robot.clickOn("#phrase3").write("Hamster");
