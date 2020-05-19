@@ -32,23 +32,23 @@ class EditVocabTest extends LangUiTestBase {
         test1.addPhrase(new Entry("Hund","dog"));
         test1.addPhrase(new Entry("Katze","cat"));
         test1.addPhrase(new Entry("Fisch","fish"));
-        Parent root = new EditVocab(vocab, test1);
+        Parent root = new EditVocab(vocab, test1, 1);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-/*
+
     @Test
     public void testEdit(FxRobot robot) {
-        robot.clickOn("#category").write(""); // TODO How do i delete whats in there?
+        robot.clickOn("#category").eraseText(10);
         WaitForAsyncUtils.waitForFxEvents(100);
         robot.clickOn("#submit_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
-        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please fill out the name of your Vocabulary group"));
+        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please fill out the Name of your Vocabulary group"));
     }
-*/
+
     @Test
-    public void testEdit1(FxRobot robot) { //TODO GIVES ERROR ON GIT
+    public void testEdit1(FxRobot robot) {
         robot.clickOn("#add_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
         robot.clickOn("#phrase3").write("Hamster");
