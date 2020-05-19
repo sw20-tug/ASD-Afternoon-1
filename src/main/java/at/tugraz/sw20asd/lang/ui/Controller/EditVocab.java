@@ -41,16 +41,19 @@ public class EditVocab extends VBox {
     private List<TextField> phrase_field_list = new ArrayList<TextField>();
     private List<TextField> translation_field_list = new ArrayList<TextField>();
 
-    private Task<Integer> edittask;
+    private Task<Integer> edittask1;
+    private Task<Integer> edittask2;
     private VocabularyAccess vocab;
     private Vocabulary voc;
+    private int origin_scene;
 
     private int id;
     FXMLLoader loader = new FXMLLoader();
 
-    public EditVocab(VocabularyAccess vocab, Vocabulary voc){
+    public EditVocab(VocabularyAccess vocab, Vocabulary voc, int origin_scene){
         this.vocab = vocab;
         this.voc = voc;
+        this.origin_scene = origin_scene;
         URL location = getClass().getResource("/edit.fxml");
         loader.setControllerFactory(c -> this);
         loader.setRoot(this);
@@ -119,8 +122,14 @@ public class EditVocab extends VBox {
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                OverviewWords overview = new OverviewWords(vocab, voc.getID());
-                getScene().setRoot(overview);
+                if(origin_scene == 1){
+                    OverviewVocabs overview = new OverviewVocabs(vocab);
+                    getScene().setRoot(overview);
+                }
+                else{
+                    EditVocabSelection editvocabs = new EditVocabSelection(vocab);
+                    getScene().setRoot(editvocabs);
+                }
             }
         });
     }
@@ -153,33 +162,32 @@ public class EditVocab extends VBox {
 
         Locale source_lang = voc.getSourceLanguage();
         Locale target_lang = voc.getTargetLanguage();
-        Vocabulary vocabulary = new Vocabulary(voc.getID(), category.getText(), source_lang, target_lang);
+        Vocabulary edited_vocabulary = new Vocabulary(voc.getID(), category.getText(), source_lang, target_lang);
 
         for(int counter = 0; counter < entry_list.size(); counter++)
         {
-            vocabulary.addPhrase(entry_list.get(counter));
+            edited_vocabulary.addPhrase(entry_list.get(counter));
         }
 
-        edittask = new Task<Integer> () {
+        edittask1 = new Task<Integer> () {
             @Override
             protected Integer call() throws Exception {
                 int id = 0;
-                // TODO Edit vocab
-                id = vocab.addVocabulary(vocabulary);
+                id = vocab.deleteVocabulary(voc.getID());
                 return id;
             }
         };
 
-        edittask.stateProperty().addListener(((observableValue, oldState, newState)->{
+        edittask1.stateProperty().addListener(((observableValue, oldState, newState)->{
             if(newState == Worker.State.CANCELLED){
-                edittask.cancel();
+                edittask1.cancel();
             }
             if(newState == Worker.State.SUCCEEDED){
-                id = edittask.getValue();
+                id = edittask1.getValue();
 
                 if(id != -1){
                     Platform.runLater(() -> {
-                        updateUserInformation("edited_vocab");
+                        addVocabulary(edited_vocabulary);
                     });
                 }
                 else{
@@ -190,7 +198,42 @@ public class EditVocab extends VBox {
             }
         }));
 
-        Thread th = new Thread(edittask);
+        Thread th = new Thread(edittask1);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    private void addVocabulary(Vocabulary vocabulary){
+        user_info.setVisible(false);
+
+        edittask2 = new Task<Integer> () {
+            @Override
+            protected Integer call() throws Exception {
+                int id = 0;
+                id = vocab.addVocabulary(vocabulary);
+                return id;
+            }
+        };
+
+        edittask2.stateProperty().addListener(((observableValue, oldState, newState)->{
+            if(newState == Worker.State.CANCELLED){
+                edittask2.cancel();
+            }
+            if(newState == Worker.State.SUCCEEDED){
+                id = edittask2.getValue();
+                if(id != -1){
+                    Platform.runLater(() -> {
+                            updateUserInformation("edited_vocab");
+                    });
+                }
+                else{
+                    Platform.runLater(() -> {
+                        updateUserInformation("");
+                    });
+                }
+            }
+        }));
+        Thread th = new Thread(edittask2);
         th.setDaemon(true);
         th.start();
     }

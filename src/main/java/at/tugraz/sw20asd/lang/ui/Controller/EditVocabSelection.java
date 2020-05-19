@@ -40,8 +40,10 @@ public class EditVocabSelection extends VBox {
 
     private VocabularyAccess vocab;
 
+    private Task<Integer> deletetask;
     private Task<List<Vocabulary>> getAllVocabsTask;
     private List<Vocabulary> Vocabularies;
+    private int id;
 
     public EditVocabSelection(VocabularyAccess vocab) {
         this.vocab = vocab;
@@ -58,6 +60,7 @@ public class EditVocabSelection extends VBox {
 
     public void initialize(){
         getVocabs();
+        user_info.setVisible(false);
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 clearEditVocabs();
@@ -77,7 +80,7 @@ public class EditVocabSelection extends VBox {
         };
 
         getAllVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED || getAllVocabsTask.getValue() == null) {
+            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED) {
                 Platform.runLater(() -> {
                     updateUserInformation("");
                 });
@@ -110,6 +113,9 @@ public class EditVocabSelection extends VBox {
             case "Server error":
                 user_info.setText("Server not working");
                 break;
+            case "deleted_vocab":
+                user_info.setText("Vocabulary deleted!");
+                break;
             default:
                 user_info.setText("");
         }
@@ -130,7 +136,7 @@ public class EditVocabSelection extends VBox {
             vocab_button.setText(Vocabularies.get(current_counter).getName());
             vocab_button.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter));
+                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter), 2);
                     getScene().setRoot(edit);
                 }
             });
@@ -145,7 +151,7 @@ public class EditVocabSelection extends VBox {
             delete_button.setText("-");
             delete_button.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    // TODO delete vocabulary
+                    sendDeleteCommand(Vocabularies.get(current_counter).getID());
                     button_list.getChildren().remove(vocab_button);
                     delete_button_list.getChildren().remove(delete_button);
                 }
@@ -153,6 +159,43 @@ public class EditVocabSelection extends VBox {
             delete_button_list.getChildren().add(delete_button);
         }
 
+    }
+
+    private void sendDeleteCommand(int vocab_id) {
+        user_info.setVisible(false);
+        id = -1;
+
+        deletetask = new Task<Integer> () {
+            @Override
+            protected Integer call() throws Exception {
+                int id = 0;
+                id = vocab.deleteVocabulary(vocab_id);
+                return id;
+            }
+        };
+
+        deletetask.stateProperty().addListener(((observableValue, oldState, newState)->{
+            if(newState == Worker.State.CANCELLED){
+                deletetask.cancel();
+            }
+            if(newState == Worker.State.SUCCEEDED){
+                id = deletetask.getValue();
+                if(id != -1){
+                    Platform.runLater(() -> {
+                        updateUserInformation("deleted_vocab");
+                    });
+                }
+                else{
+                    Platform.runLater(() -> {
+                        updateUserInformation("");
+                    });
+                }
+            }
+        }));
+
+        Thread th = new Thread(deletetask);
+        th.setDaemon(true);
+        th.start();
     }
 
     private void clearEditVocabs() {
