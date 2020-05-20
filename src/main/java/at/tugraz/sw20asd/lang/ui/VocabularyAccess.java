@@ -11,6 +11,8 @@ public interface VocabularyAccess {
 
     Integer addVocabulary(VocabularyDetailDto vocabulary);
 
+    void deleteVocabulary(long id);
+
     VocabularyDetailDto getVocabulary(long id);
 
     List<VocabularyBaseDto> getAllVocabularies();
