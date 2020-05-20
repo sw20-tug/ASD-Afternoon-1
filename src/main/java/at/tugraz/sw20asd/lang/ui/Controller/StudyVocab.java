@@ -31,27 +31,35 @@ public class StudyVocab extends VBox {
     @FXML
     private Button return_btn;
     @FXML
-    private Label user_info;
+    private Button show_all_btn;
     @FXML
     private Label study_label;
     @FXML
+    private AnchorPane anchor_pane;
+    @FXML
+    private Label user_info;
+    @FXML
+    private Label choice_label;
+    @FXML
     private Label given_label;
+    @FXML
+    private ComboBox<String> language_choice;
+    @FXML
+    private Button start_btn;
 
     private List<Button> answer_button_list = new ArrayList<Button>();
     private List<Label> given_label_list = new ArrayList<Label>();
     private List<Label> answer_label_list = new ArrayList<Label>();
-
-    private int id;
+    private List<EntryDto> words = new ArrayList<>();
 
     private VocabularyAccess vocab;
-    private VocabularyDetailDto voc;
+    private List<VocabularyDetailDto> voc;
     private String study_language;
     FXMLLoader loader = new FXMLLoader();
 
-    public StudyVocab(VocabularyAccess vocab, VocabularyDetailDto voc, String study_language) {
+    public StudyVocab(VocabularyAccess vocab, List<VocabularyDetailDto> voc) {
         this.vocab = vocab;
         this.voc = voc;
-        this.study_language = study_language;
         URL location = getClass().getResource("/study.fxml");
         loader.setControllerFactory(c -> this);
         loader.setRoot(this);
@@ -65,24 +73,98 @@ public class StudyVocab extends VBox {
         public void initialize() {
             user_info.setVisible(false);
             study_label.setText(study_language);
-            if(!study_language.equals(voc.getSourceLanguage().toString())){
-                given_label.setText(voc.getSourceLanguage().getLanguage());
+            show_all_btn.setVisible(false);
+            switch_btn.setVisible(false);
+            given_label.setVisible(false);
+            study_label.setVisible(false);
+            start_btn.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    if(language_choice.getSelectionModel().isEmpty()){
+                        user_info.setVisible(true);
+                        user_info.setText("Please choose a language!");
+                    }
+                    else {
+                        study_language = language_choice.getSelectionModel().getSelectedItem();
+                        language_choice.getSelectionModel().isEmpty();
+                        study_label.setText(study_language);
+                        for(int counter = 0; counter < voc.size(); counter++){
+                            if(voc.get(counter).getSourceLanguage().toString().equals("de")){
+                                for(EntryDto e : voc.get(counter).getEntries()){
+                                    words.add(e);
+                                }
+                            }
+                            else{
+                                for(EntryDto e : voc.get(counter).getEntries()){
+                                    EntryDto e_convert = new EntryDto(e.getTranslation(),e.getPhrase());
+                                    words.add(e_convert);
+                                }
+                            }
+                        }
+                        populate();
+                    }
+                }
+            });
+
+            return_btn.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    OverviewVocabs overview = new OverviewVocabs(vocab);
+                    getScene().setRoot(overview);
+                }
+            });
+
+        }
+
+        private void showAllAnswers(){
+                if(show_all_btn.getText().equals("Show All Answers")){
+                    for(int counter = 0; counter < given_label_list.size(); counter++) {
+                        answer_label_list.get(counter).setVisible(true);
+                        answer_button_list.get(counter).setText("Hide Answer");
+                        show_all_btn.setText("Hide All Answers");
+                    }
+                }
+                else{
+                    for(int counter = 0; counter < given_label_list.size(); counter++) {
+                        answer_label_list.get(counter).setVisible(false);
+                        answer_button_list.get(counter).setText("Show Answer");
+                        show_all_btn.setText("Show All Answers");
+                    }
+                }
             }
-            else {
-                given_label.setText(voc.getTargetLanguage().getLanguage());
+
+        private void switchLanguage(){
+            show_all_btn.setText("Hide All Answers");
+            showAllAnswers();
+            for(int counter = 0; counter < given_label_list.size(); counter++)
+            {
+                String new_answer = given_label_list.get(counter).getText();
+                String new_given = answer_label_list.get(counter).getText();
+                String new_given_language = study_label.getText();
+                String new_study_language = given_label.getText();
+
+                given_label_list.get(counter).setText(new_given);
+                answer_label_list.get(counter).setText(new_answer);
+                given_label.setText(new_given_language);
+                study_label.setText(new_study_language);
             }
-            Set<EntryDto> words_set = voc.getEntries();
-            List<EntryDto> words = new ArrayList<>();
-            for(EntryDto e : words_set){
-                words.add(e);
-            }
+        }
+
+        private void populate(){
+            user_info.setVisible(false);
+            show_all_btn.setVisible(true);
+            switch_btn.setVisible(true);
+            given_label.setVisible(true);
+            study_label.setVisible(true);
+            anchor_pane.getChildren().remove(choice_label);
+            anchor_pane.getChildren().remove(language_choice);
+            anchor_pane.getChildren().remove(start_btn);
+
             int min_height = 30;
             int margin = 10;
             for (int counter = 0; counter < words.size(); counter++) {
 
                 String given_str;
                 String answer_str;
-                if(study_language.equals(voc.getSourceLanguage().toString())){
+                if(study_language.equals("de")){
                     given_str = words.get(counter).getTranslation();
                     answer_str = words.get(counter).getPhrase();
                 }
@@ -133,27 +215,11 @@ public class StudyVocab extends VBox {
                 }
             });
 
-            return_btn.setOnAction(new EventHandler<ActionEvent>() {
+            show_all_btn.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                        OverviewVocabs overview = new OverviewVocabs(vocab);
-                        getScene().setRoot(overview);
+                    showAllAnswers();
                 }
             });
-        }
-
-        private void switchLanguage(){
-            for(int counter = 0; counter < given_label_list.size(); counter++)
-            {
-                String new_answer = given_label_list.get(counter).getText();
-                String new_given = answer_label_list.get(counter).getText();
-                String new_given_language = study_label.getText();
-                String new_study_language = given_label.getText();
-
-                given_label_list.get(counter).setText(new_given);
-                answer_label_list.get(counter).setText(new_answer);
-                given_label.setText(new_given_language);
-                study_label.setText(new_study_language);
-            }
         }
     }
 
