@@ -55,6 +55,7 @@ public class OverviewVocabs extends VBox {
     }
 
     public void initialize() {
+        user_info.setVisible(false);
         getVocabs();
 
         scrollPaneContent.minWidthProperty().bind(Bindings.createDoubleBinding(() ->
@@ -147,7 +148,7 @@ public class OverviewVocabs extends VBox {
         };
 
         getAllVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED || getAllVocabsTask.getValue() == null) {
+            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED) {
                 Platform.runLater(() -> {
                     updateUserInformation("");
                 });
@@ -179,5 +180,8 @@ public class OverviewVocabs extends VBox {
 
     private void clearOverviewVocabs() {
         Vocabularies.clear();
+        user_info.setVisible(false);
+        getAllVocabsTask.cancel();
+        scrollPaneContent.getChildren().clear();
     }
 }
