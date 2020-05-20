@@ -1,27 +1,28 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
 
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.EntryDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
-
-import at.tugraz.sw20asd.lang.model.Entry;
-import javafx.scene.paint.Color;
 
 public class AddVocab extends VBox {
     @FXML
@@ -59,7 +60,7 @@ public class AddVocab extends VBox {
     private int id;
     FXMLLoader loader = new FXMLLoader();
 
-    public AddVocab(VocabularyAccess vocab){
+    public AddVocab(VocabularyAccess vocab) {
 
         this.vocab = vocab;
         URL location = getClass().getResource("/add.fxml");
@@ -74,7 +75,8 @@ public class AddVocab extends VBox {
 
     }
 
-    public void initialize(){
+
+    public void initialize() {
         user_info.setVisible(false);
         ObservableList<String> languages =
                 FXCollections.observableArrayList("German", "English");
@@ -82,21 +84,18 @@ public class AddVocab extends VBox {
         from_choice.setItems(languages);
         to_choice.setItems(languages);
 
-
         language_map.put("German", Locale.GERMAN);
         language_map.put("English", Locale.ENGLISH);
-
 
 
         from_choice.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             from_label.setText(newValue + ":");
 
-            if(!to_choice.getSelectionModel().isEmpty()  &&
-                    (to_choice.getSelectionModel().getSelectedItem().equals(newValue))){
+            if (!to_choice.getSelectionModel().isEmpty() &&
+                    (to_choice.getSelectionModel().getSelectedItem().equals(newValue))) {
 
                 updateUserInformation("equal_lang");
-            }
-            else{
+            } else {
                 user_info.setVisible(false);
             }
         });
@@ -104,12 +103,11 @@ public class AddVocab extends VBox {
         to_choice.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             to_label.setText(newValue + ":");
 
-            if(!from_choice.getSelectionModel().isEmpty() &&
-                    from_choice.getSelectionModel().getSelectedItem().equals(newValue)){
+            if (!from_choice.getSelectionModel().isEmpty() &&
+                    from_choice.getSelectionModel().getSelectedItem().equals(newValue)) {
 
                 updateUserInformation("equal_lang");
-            }
-            else{
+            } else {
                 user_info.setVisible(false);
             }
         });
@@ -158,18 +156,14 @@ public class AddVocab extends VBox {
         submit_btn.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
-                if(from_choice.getSelectionModel().isEmpty()
-                        || to_choice.getSelectionModel().isEmpty()){
+                if (from_choice.getSelectionModel().isEmpty()
+                        || to_choice.getSelectionModel().isEmpty()) {
                     updateUserInformation("missing_selection");
-                }
-                else if(from_choice.getSelectionModel().getSelectedItem().equals(to_choice.getSelectionModel().getSelectedItem())){
+                } else if (from_choice.getSelectionModel().getSelectedItem().equals(to_choice.getSelectionModel().getSelectedItem())) {
                     updateUserInformation("equal_lang");
-                }
-                else if(category.getText().isEmpty()){
+                } else if (category.getText().isEmpty()) {
                     updateUserInformation("category");
-                }
-                else if(!checkEntries())
-                {
+                } else if (!checkEntries()) {
                     updateUserInformation("entry_missing");
                 }
                 else {
@@ -186,14 +180,12 @@ public class AddVocab extends VBox {
                 getScene().setRoot(con);
             }
         });
-
-
     }
 
-    private void updateUserInformation(String code){
+    private void updateUserInformation(String code) {
         user_info.setVisible(true);
         user_info.setTextFill(Color.RED);
-        switch (code){
+        switch (code) {
             case "added_vocab":
                 user_info.setText("Vocabulary added!");
                 break;
@@ -217,7 +209,7 @@ public class AddVocab extends VBox {
         }
     }
 
-    private void sendAddCommand(){
+    private void sendAddCommand() {
 
         user_info.setVisible(false);
         int amount = getAmountOfEntries();
@@ -229,17 +221,16 @@ public class AddVocab extends VBox {
         Locale source_lang = language_map.get(from_lang);
         Locale target_lang = language_map.get(to_lang);
 
-        Vocabulary vocabulary = new Vocabulary(null, category_string, source_lang, target_lang);
+        VocabularyDetailDto vocabulary = new VocabularyDetailDto(null, category_string, source_lang, target_lang);
 
-        for(int i = 0; (i + 1) < amount; i++)
-        {
+        for (int i = 0; (i + 1) < amount; i++) {
             String from = vocabulary_list.get(i);
             String to = vocabulary_list.get(++i);
-            Entry entry = new Entry(from, to);
-            vocabulary.addPhrase(entry);
+            EntryDto entry = new EntryDto(from, to);
+            vocabulary.addEntry(entry);
         }
 
-        addtask = new Task<Integer> () {
+        addtask = new Task<Integer>() {
             @Override
             protected Integer call() throws Exception {
                 int id = 0;
@@ -248,11 +239,11 @@ public class AddVocab extends VBox {
             }
         };
 
-        addtask.stateProperty().addListener(((observableValue, oldState, newState)->{
-            if(newState == Worker.State.CANCELLED){
+        addtask.stateProperty().addListener(((observableValue, oldState, newState) -> {
+            if (newState == Worker.State.CANCELLED) {
                 addtask.cancel();
             }
-            if(newState == Worker.State.SUCCEEDED){
+            if (newState == Worker.State.SUCCEEDED) {
                 id = addtask.getValue();
                 if(id != -1){
                     Platform.runLater(() -> {
@@ -273,37 +264,36 @@ public class AddVocab extends VBox {
         th.start();
 
 
-
     }
 
-    private int getAmountOfEntries(){
+    private int getAmountOfEntries() {
         int amount = 0;
-        if(!from_field.getText().isEmpty() && !to_field.getText().isEmpty()){
+        if (!from_field.getText().isEmpty() && !to_field.getText().isEmpty()) {
             amount += 2;
             vocabulary_list.addAll(from_string, to_string);
         }
 
-        if(!from_field1.getText().isEmpty() && !to_field1.getText().isEmpty()){
+        if (!from_field1.getText().isEmpty() && !to_field1.getText().isEmpty()) {
             amount += 2;
             vocabulary_list.addAll(from_string1, to_string1);
         }
 
-        if(!from_field2.getText().isEmpty() && !to_field2.getText().isEmpty()){
+        if (!from_field2.getText().isEmpty() && !to_field2.getText().isEmpty()) {
             amount += 2;
             vocabulary_list.addAll(from_string2, to_string2);
         }
 
-        if(!from_field3.getText().isEmpty() && !to_field3.getText().isEmpty()){
+        if (!from_field3.getText().isEmpty() && !to_field3.getText().isEmpty()) {
             amount += 2;
             vocabulary_list.addAll(from_string3, to_string3);
         }
 
-        if(!from_field4.getText().isEmpty() && !to_field4.getText().isEmpty()){
+        if (!from_field4.getText().isEmpty() && !to_field4.getText().isEmpty()) {
             amount += 2;
             vocabulary_list.addAll(from_string4, to_string4);
         }
 
-        if(!from_field5.getText().isEmpty() && !to_field5.getText().isEmpty()){
+        if (!from_field5.getText().isEmpty() && !to_field5.getText().isEmpty()) {
             amount += 2;
             vocabulary_list.addAll(from_string5, to_string5);
         }

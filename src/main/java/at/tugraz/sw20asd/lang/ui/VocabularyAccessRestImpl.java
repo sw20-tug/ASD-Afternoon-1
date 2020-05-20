@@ -1,6 +1,7 @@
 package at.tugraz.sw20asd.lang.ui;
 
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -22,7 +23,6 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     private URI uri;
 
     public VocabularyAccessRestImpl(String host, int port){
-
         try {
             uri = new URI(String.format("http://%s:%d/vocab/", host, port));
         } catch (URISyntaxException e) {
@@ -31,13 +31,13 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public Integer addVocabulary(Vocabulary vocabulary) {
+    public Integer addVocabulary(VocabularyDetailDto vocabulary) {
 
         int id = -1;
         String buffer = null;
         String parse = null;
 
-        HttpEntity<Vocabulary> request = new HttpEntity<>(vocabulary);
+        HttpEntity<VocabularyDetailDto> request = new HttpEntity<>(vocabulary);
 
         ResponseEntity<Object> result = restTemplate.postForEntity(uri, request, Object.class);
 
@@ -55,10 +55,10 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public Vocabulary getVocabulary(long id) {
+    public VocabularyDetailDto getVocabulary(long id) {
         try
         {
-            ResponseEntity<Vocabulary> response = restTemplate.getForEntity(vocabularyWithId(id), Vocabulary.class);
+            ResponseEntity<VocabularyDetailDto> response = restTemplate.getForEntity(vocabularyWithId(id), VocabularyDetailDto.class);
 
             if(!response.getStatusCode().equals(HttpStatus.OK)
                     || !response.hasBody()) {
@@ -76,12 +76,12 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
-    public List<Vocabulary> getAllVocabularies() {
-        ResponseEntity<List<Vocabulary>> response = restTemplate.exchange(
+    public List<VocabularyBaseDto> getAllVocabularies() {
+        ResponseEntity<List<VocabularyBaseDto>> response = restTemplate.exchange(
                 uri,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<Vocabulary>>() {
+                new ParameterizedTypeReference<List<VocabularyBaseDto>>() {
                 });
         if(!response.getStatusCode().equals(HttpStatus.OK)
                 || !response.hasBody()) {

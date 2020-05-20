@@ -1,32 +1,32 @@
-package at.tugraz.sw20asd.lang.server;
+package at.tugraz.sw20asd.lang.server.controllers;
 
-import at.tugraz.sw20asd.lang.model.Entry;
-import at.tugraz.sw20asd.lang.model.Vocabulary;
-import at.tugraz.sw20asd.lang.service.VocabularyDAO;
+import at.tugraz.sw20asd.lang.dto.EntryDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
+import at.tugraz.sw20asd.lang.server.services.IVocabularyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/vocab")
 public class VocabularyController {
 
-    private VocabularyDAO _vocabularyDao;
+    private final IVocabularyService _vocabularyService;
 
     @Autowired
-    public VocabularyController(VocabularyDAO vocabularyDAO) {
-        _vocabularyDao = vocabularyDAO;
+    public VocabularyController(IVocabularyService vocabularyService) {
+        this._vocabularyService = vocabularyService;
     }
 
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Object> addVocabulary(@RequestBody Vocabulary vocabulary) {
-
+    public ResponseEntity<?> addVocabulary(@RequestBody VocabularyDetailDto vocabulary) {
         try {
-            int insertedIndex = _vocabularyDao.addVocabulary(vocabulary);
+            Long insertedIndex = _vocabularyService.add(vocabulary);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(insertedIndex)
@@ -39,34 +39,35 @@ public class VocabularyController {
     }
 
     @GetMapping(path = "/")
-    public ResponseEntity<Collection<Vocabulary>> getAllVocabularies() {
-        return ResponseEntity.ok().body(_vocabularyDao.findAll());
+    public List<VocabularyBaseDto> overview() {
+        return _vocabularyService.list();
     }
 
     @GetMapping(path = "/{idString}")
-    public ResponseEntity<Object> getVocabularyById(@PathVariable String idString) {
-        int id;
+    public ResponseEntity<VocabularyDetailDto> getVocabularyById(@PathVariable String idString) {
+        long id;
         try {
-            id = Integer.parseInt(idString);
+            id = Long.parseLong(idString);
         } catch (NumberFormatException ex) {
             return ResponseEntity.badRequest().build();
         }
-        Vocabulary result = _vocabularyDao.findById(id);
+        VocabularyDetailDto result = _vocabularyService.findById(id);
         if (result == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping(path="/{idString}/add")
-    public ResponseEntity<Object> addEntryToVocabulary(@PathVariable String idString, @RequestBody Entry entry) {
-        int id;
+    @PostMapping(path = "/{idString}")
+    public ResponseEntity<?> addEntryToVocabulary(@PathVariable String idString, @RequestBody EntryDto entry) {
+        long id;
         try {
-            id = Integer.parseInt(idString);
-        } catch(NumberFormatException ex) {
+            id = Long.parseLong(idString);
+        } catch (NumberFormatException ex) {
             return ResponseEntity.badRequest().build();
         }
-        if(_vocabularyDao.addEntryToVocabulary(id, entry)) {
+
+        if (_vocabularyService.addToVocabulary(id, entry)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
