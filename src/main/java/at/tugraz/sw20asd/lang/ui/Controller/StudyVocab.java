@@ -1,6 +1,7 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
 
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.EntryDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import at.tugraz.sw20asd.lang.model.Entry;
+import java.util.Set;
+
 import javafx.scene.paint.Color;
 
 public class StudyVocab extends VBox {
@@ -23,9 +25,9 @@ public class StudyVocab extends VBox {
     @FXML
     private VBox answer_list;
     @FXML
-    private VBox study_list;
+    private VBox show_answer_list;
     @FXML
-    private Button submit_btn;
+    private Button switch_btn;
     @FXML
     private Button return_btn;
     @FXML
@@ -34,26 +36,19 @@ public class StudyVocab extends VBox {
     private Label study_label;
     @FXML
     private Label given_label;
-    @FXML
-    private Label category;
-    private List<TextField> study_field_list = new ArrayList<TextField>();
+
+    private List<Button> answer_button_list = new ArrayList<Button>();
     private List<Label> given_label_list = new ArrayList<Label>();
     private List<Label> answer_label_list = new ArrayList<Label>();
-    private Border right_answer = new Border(new BorderStroke(Color.GREEN,
-            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-    private Border wrong_answer = new Border(new BorderStroke(Color.RED,
-            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-    private Border no_border = new Border(new BorderStroke(Color.WHITE,
-            BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.EMPTY));
 
     private int id;
 
     private VocabularyAccess vocab;
-    private Vocabulary voc;
+    private VocabularyDetailDto voc;
     private String study_language;
     FXMLLoader loader = new FXMLLoader();
 
-    public StudyVocab(VocabularyAccess vocab, Vocabulary voc, String study_language) {
+    public StudyVocab(VocabularyAccess vocab, VocabularyDetailDto voc, String study_language) {
         this.vocab = vocab;
         this.voc = voc;
         this.study_language = study_language;
@@ -69,7 +64,6 @@ public class StudyVocab extends VBox {
 
         public void initialize() {
             user_info.setVisible(false);
-            category.setText(voc.getName());
             study_label.setText(study_language);
             if(!study_language.equals(voc.getSourceLanguage().toString())){
                 given_label.setText(voc.getSourceLanguage().getLanguage());
@@ -77,17 +71,14 @@ public class StudyVocab extends VBox {
             else {
                 given_label.setText(voc.getTargetLanguage().getLanguage());
             }
-            List<Entry> words = voc.getEntries();
+            Set<EntryDto> words_set = voc.getEntries();
+            List<EntryDto> words = new ArrayList<>();
+            for(EntryDto e : words_set){
+                words.add(e);
+            }
             int min_height = 30;
             int margin = 10;
             for (int counter = 0; counter < words.size(); counter++) {
-
-                TextField study = new TextField();
-                study.setId("study" + study_field_list.size());
-                study.setMinHeight(min_height);
-                setMargin(study, new Insets(10,0,0,0));
-                study_field_list.add(study);
-                study_list.getChildren().add(study);
 
                 String given_str;
                 String answer_str;
@@ -114,11 +105,31 @@ public class StudyVocab extends VBox {
                 setMargin(answer, new Insets(10,0,0,0));
                 answer_label_list.add(answer);
                 answer_list.getChildren().add(answer);
+
+                Button show_answer = new Button();
+                show_answer.setText("Show Answer");
+                show_answer.setId("btn" + answer_button_list.size());
+                show_answer.setMinHeight(min_height);
+                setMargin(show_answer, new Insets(10,0,0,0));
+                show_answer.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        if(show_answer.getText().equals("Show Answer")){
+                            answer.setVisible(true);
+                            show_answer.setText("Hide Answer");
+                        }
+                        else {
+                            answer.setVisible(false);
+                            show_answer.setText("Show Answer");
+                        }
+                    }
+                });
+                answer_button_list.add(show_answer);
+                show_answer_list.getChildren().add(show_answer);
             }
 
-            submit_btn.setOnAction(new EventHandler<ActionEvent>() {
+            switch_btn.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    checkAnswer();
+                    switchLanguage();
                 }
             });
 
@@ -130,46 +141,18 @@ public class StudyVocab extends VBox {
             });
         }
 
-        private void checkAnswer(){
-            boolean result_bool = true;
-            if(submit_btn.getText().equals("Check Answer")) {
-                for (int counter = 0; counter < answer_label_list.size(); counter++) {
-                    if(!study_field_list.get(counter).getText().isEmpty()){
-                        answer_label_list.get(counter).setVisible(true);
-                        if(answer_label_list.get(counter).getText().equals(study_field_list.get(counter).getText())) {
-                            study_field_list.get(counter).setBorder(right_answer);
-                        }
-                        else{
-                            study_field_list.get(counter).setBorder(wrong_answer);
-                            result_bool = false;
-                        }
-                    }
-                    else{
-                        result_bool = false;
-                    }
-                }
-                checkResult(result_bool);
-                submit_btn.setText("Hide Answer");
-            }
-            else{
-                for (int counter = 0; counter < answer_label_list.size(); counter++) {
-                    answer_label_list.get(counter).setVisible(false);
-                    study_field_list.get(counter).setBorder(no_border);
-                }
-                user_info.setVisible(false);
-                submit_btn.setText("Check Answer");
-            }
-        }
+        private void switchLanguage(){
+            for(int counter = 0; counter < given_label_list.size(); counter++)
+            {
+                String new_answer = given_label_list.get(counter).getText();
+                String new_given = answer_label_list.get(counter).getText();
+                String new_given_language = study_label.getText();
+                String new_study_language = given_label.getText();
 
-        private void checkResult(boolean result){
-            user_info.setVisible(true);
-            if(result == true){
-                user_info.setTextFill(Color.GREEN);
-                user_info.setText("All answers are correct");
-            }
-            else{
-                user_info.setTextFill(Color.RED);
-                user_info.setText("Try again!");
+                given_label_list.get(counter).setText(new_given);
+                answer_label_list.get(counter).setText(new_answer);
+                given_label.setText(new_given_language);
+                study_label.setText(new_study_language);
             }
         }
     }
