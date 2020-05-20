@@ -5,7 +5,6 @@ import at.tugraz.sw20asd.lang.server.services.IEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/entry")
@@ -34,21 +33,41 @@ public class EntryController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping(path= "/")
+    @PostMapping(path = "/")
     public ResponseEntity<?> editEntry(@RequestBody EntryDto entry) {
-        if(!validateDto(entry)) {
+        if (!validateDto(entry)) {
             return ResponseEntity.badRequest().build();
         }
 
-        if(!_entryService.updateEntry(entry)) {
+        if (!_entryService.updateEntry(entry)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/{idString}")
+    public ResponseEntity<?> deleteEntry(@PathVariable String idString) {
+        Long id = parseFromString(idString);
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (_entryService.deleteEntry(id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private boolean validateDto(EntryDto e) {
         return e.getId() != null
                 && e.getPhrase() != null
                 && e.getTranslation() != null;
+    }
+
+    private Long parseFromString(String str) {
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 }

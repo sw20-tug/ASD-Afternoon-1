@@ -5,6 +5,7 @@ import at.tugraz.sw20asd.lang.server.services.IEntryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -98,6 +99,29 @@ public class EntryControllerTests {
         ResponseEntity<?> responseEntity = entryController.editEntry(getRandomEntry());
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void testDeleteEntry_ReturnsOk() {
+        when(entryService.deleteEntry(anyLong())).thenReturn(true);
+
+        ResponseEntity<?> responseEntity = entryController.deleteEntry("1");
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void testDeleteEntry_ReturnsNotFound() {
+        ResponseEntity<?> responseEntity = entryController.deleteEntry("1");
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "non-numeric-value", "1.2", "2,3"})
+    public void testDeleteEntry_ReturnsBadRequest(String str) {
+        ResponseEntity<?> response = entryController.deleteEntry(str);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     private EntryDto getRandomEntry() {

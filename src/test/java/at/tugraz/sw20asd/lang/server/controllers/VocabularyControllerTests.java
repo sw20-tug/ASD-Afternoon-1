@@ -109,12 +109,35 @@ public class VocabularyControllerTests {
 	}
 
 	@Test
-	public void test_AddEntry_ReturnsOk() {
+	public void testAddEntry_ReturnsOk() {
 		when(vocabularyService.addToVocabulary(anyLong(), any(EntryDto.class))).thenReturn(true);
 
 		ResponseEntity<?> responseEntity = vocabularyController.addEntryToVocabulary("1", getRandomEntry());
 
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
+
+	@Test
+	public void testDeleteVocabulary_ReturnsOk() {
+		when(vocabularyService.deleteVocabulary(anyLong())).thenReturn(true);
+
+		ResponseEntity<?> responseEntity = vocabularyController.deleteVocabulary("1");
+
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
+
+	@Test
+	public void testDeleteVocabulary_ReturnsNotFound() {
+		ResponseEntity<?> responseEntity = vocabularyController.deleteVocabulary("1");
+
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@ParameterizedTest
+	@MethodSource("invalidIdSource")
+	public void testDeleteVocabulary_ReturnsBadRequest(String str) {
+		ResponseEntity<?> response = vocabularyController.deleteVocabulary(str);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 	private EntryDto getRandomEntry() {

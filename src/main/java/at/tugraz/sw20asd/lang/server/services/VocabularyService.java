@@ -59,6 +59,15 @@ public class VocabularyService implements IVocabularyService {
         return true;
     }
 
+    @Override
+    public boolean deleteVocabulary(Long id) {
+        if (_vocabularyRepository.existsById(id)) {
+            _vocabularyRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     private VocabularyBaseDto convertToOverviewDto(Vocabulary v) {
         return _modelMapper.map(v, VocabularyBaseDto.class);
     }

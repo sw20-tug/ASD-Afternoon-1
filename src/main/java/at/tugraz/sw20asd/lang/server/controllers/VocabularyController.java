@@ -45,12 +45,11 @@ public class VocabularyController {
 
     @GetMapping(path = "/{idString}")
     public ResponseEntity<VocabularyDetailDto> getVocabularyById(@PathVariable String idString) {
-        long id;
-        try {
-            id = Long.parseLong(idString);
-        } catch (NumberFormatException ex) {
+        Long id = parseFromString(idString);
+        if (id == null) {
             return ResponseEntity.badRequest().build();
         }
+
         VocabularyDetailDto result = _vocabularyService.findById(id);
         if (result == null) {
             return ResponseEntity.notFound().build();
@@ -60,10 +59,8 @@ public class VocabularyController {
 
     @PostMapping(path = "/{idString}")
     public ResponseEntity<?> addEntryToVocabulary(@PathVariable String idString, @RequestBody EntryDto entry) {
-        long id;
-        try {
-            id = Long.parseLong(idString);
-        } catch (NumberFormatException ex) {
+        Long id = parseFromString(idString);
+        if (id == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -72,4 +69,28 @@ public class VocabularyController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping(path = "/{idString}")
+    public ResponseEntity<?> deleteVocabulary(@PathVariable String idString) {
+
+        Long id = parseFromString(idString);
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (_vocabularyService.deleteVocabulary(id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+
+    }
+
+    private Long parseFromString(String str) {
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+
+    }
+
 }

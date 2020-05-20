@@ -55,6 +55,16 @@ public class EntryService implements IEntryService {
         return true;
     }
 
+    @Override
+    public boolean deleteEntry(Long id) {
+        if (_entryRepository.existsById(id)) {
+            _entryRepository.deleteById(id);
+            return true;
+        }
+        return false;
+
+    }
+
     private EntryDto convertToDto(Entry e) {
         return _modelMapper.map(e, EntryDto.class);
     }

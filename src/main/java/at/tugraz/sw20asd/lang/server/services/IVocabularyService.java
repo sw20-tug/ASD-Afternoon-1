@@ -14,4 +14,6 @@ public interface IVocabularyService {
     VocabularyDetailDto findById(Long id);
 
     boolean addToVocabulary(Long id, EntryDto e);
+
+    boolean deleteVocabulary(Long id);
 }
