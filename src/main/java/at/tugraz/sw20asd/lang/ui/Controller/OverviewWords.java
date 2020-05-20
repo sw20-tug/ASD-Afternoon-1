@@ -115,7 +115,7 @@ public class OverviewWords extends VBox {
         };
 
         getVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.CANCELLED ) {
+            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED ) {
                 Platform.runLater(() -> {
                     updateUserInformation("");
                 });
