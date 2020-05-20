@@ -5,7 +5,6 @@ import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.models.EntryModel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -16,9 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
 import java.io.IOException;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class OverviewWords extends VBox {
@@ -35,20 +32,9 @@ public class OverviewWords extends VBox {
     @FXML
     private Label user_info;
     @FXML
-    private ComboBox<String> study_language;
-    @FXML
-    private Button study_btn;
-    @FXML
-    private String target;
-    @FXML
-    private String source;
-
-    @FXML
     public TableColumn<EntryModel, String> phraseColumn;
-
     @FXML
     public TableColumn<EntryModel, String> translationColumn;
-
     @FXML
     private TableView<EntryModel> table;
 
@@ -87,14 +73,6 @@ public class OverviewWords extends VBox {
 
             public void handle(ActionEvent event) {
                 System.out.println("Edit"); // pop ups to the edit screen
-            }
-        });
-
-        study_btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            public void handle(ActionEvent event) {
-                StudyVocab study = new StudyVocab(vocab, v, study_language.getSelectionModel().getSelectedItem());
-                getScene().setRoot(study);
             }
         });
 
@@ -153,13 +131,6 @@ public class OverviewWords extends VBox {
 
                         phraseColumn.setCellValueFactory(new PropertyValueFactory<>("Phrase"));
                         translationColumn.setCellValueFactory(new PropertyValueFactory<>("Translation"));
-
-                        String source_language = v.getSourceLanguage().toString();
-                        String target_language = v.getTargetLanguage().toString();
-                        study_language.getItems().add(source_language);
-                        study_language.getItems().add(target_language);
-
-
                         table.setItems(FXCollections.observableArrayList(
                                 v.getEntries()
                                         .stream()
