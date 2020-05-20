@@ -90,9 +90,6 @@ public class SelectionOverview extends VBox {
                 //TODO switch to train, use selectedItems as param  type ObservableList<VocabularySelectionModel>
             }
         });
-
-
-
     }
 
     private void getVocabGroups() {
@@ -120,12 +117,12 @@ public class SelectionOverview extends VBox {
                     });
                 } else {
                     Platform.runLater(() -> {
-                    vocab_list.setItems(FXCollections.observableArrayList(
-                            Vocabularies
-                                    .stream()
-                                    .map(VocabularySelectionModel::fromDto)
-                                    .collect(Collectors.toList())
-                    ));
+                        vocab_list.setItems(FXCollections.observableArrayList(
+                                Vocabularies
+                                        .stream()
+                                        .map(VocabularySelectionModel::fromDto)
+                                        .collect(Collectors.toList())
+                        ));
                     });
 
                 }
@@ -143,10 +140,10 @@ public class SelectionOverview extends VBox {
         checkBoxColumn.setCellValueFactory(new PropertyValueFactory<>("selected"));
     }
 
-    private void getSelection(){
+    private void getSelection() {
         List<VocabularySelectionModel> buffer = vocab_list.getItems();
-        for(VocabularySelectionModel v: buffer ){
-            if(v.isSelected())
+        for (VocabularySelectionModel v : buffer) {
+            if (v.isSelected())
                 selectedItems.add(v);
         }
     }
@@ -164,13 +161,10 @@ public class SelectionOverview extends VBox {
         }
     }
 
-    private void clear(){
+    private void clear() {
         getAllVocabsTask.cancel();
         selectedItems.clear();
         Vocabularies.clear();
         vocab_list.getItems().clear();
     }
-
-
-
 }
