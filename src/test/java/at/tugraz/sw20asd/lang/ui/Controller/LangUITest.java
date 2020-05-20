@@ -23,18 +23,18 @@ class LangUITest extends LangUiTestBase {
         main.start(stage);
     }
 
-    @Test
-    public void testButton(){
-        FxAssert.verifyThat("#overview_btn", LabeledMatchers.hasText("Overview"));
-        FxAssert.verifyThat("#add_btn", LabeledMatchers.hasText("Add Vocabulary"));
-        FxAssert.verifyThat("#train_btn", LabeledMatchers.hasText("Vocabulary Trainer"));
-        FxAssert.verifyThat("#exit_btn", LabeledMatchers.hasText("Exit"));
-    }
-
-    @Test
-    public void testScene(FxRobot robot){
-        robot.clickOn("#add_btn" );
-        FxAssert.verifyThat("#title", LabeledMatchers.hasText("Add new vocabulary"));
-    }
+//    @Test
+//    public void testButton(){
+//        FxAssert.verifyThat("#overview_btn", LabeledMatchers.hasText("Overview"));
+//        FxAssert.verifyThat("#add_btn", LabeledMatchers.hasText("Add Vocabulary"));
+//        FxAssert.verifyThat("#train_btn", LabeledMatchers.hasText("Vocabulary Trainer"));
+//        FxAssert.verifyThat("#exit_btn", LabeledMatchers.hasText("Exit"));
+//    }
+//
+//    @Test
+//    public void testScene(FxRobot robot){
+//        robot.clickOn("#add_btn" );
+//        FxAssert.verifyThat("#title", LabeledMatchers.hasText("Add new vocabulary"));
+//    }
 
 }
