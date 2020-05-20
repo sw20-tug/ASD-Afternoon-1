@@ -11,4 +11,6 @@ public interface IEntryService {
     List<EntryDto> findEntriesForVocabulary(Long id);
 
     boolean updateEntry(EntryDto entry);
+
+    boolean deleteEntry(Long id);
 }
