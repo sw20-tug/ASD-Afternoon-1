@@ -1,6 +1,6 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
-import at.tugraz.sw20asd.lang.model.Entry;
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.EntryDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccessRestImpl;
 import javafx.scene.Parent;
@@ -26,12 +26,13 @@ class StudyVocabTest extends LangUiTestBase {
     @Start
     public void start(Stage stage) throws Exception {
         vocab = new VocabularyAccessRestImpl("localhost", 8080);
+        long id = 0;
         Locale src = Locale.GERMAN;
         Locale dest = Locale.ENGLISH;
-        Vocabulary test1 = new Vocabulary(0,"Pets",src,dest);
-        test1.addPhrase(new Entry("Hund","dog"));
-        test1.addPhrase(new Entry("Katze","cat"));
-        test1.addPhrase(new Entry("Fisch","fish"));
+        VocabularyDetailDto test1 = new VocabularyDetailDto(id,"Pets",src,dest);
+        test1.addEntry(new EntryDto("Hund","dog"));
+        test1.addEntry(new EntryDto("Katze","cat"));
+        test1.addEntry(new EntryDto("Fisch","fish"));
         Parent root = new StudyVocab(vocab, test1, "en");
         Scene scene = new Scene(root);
         stage.setScene(scene);
