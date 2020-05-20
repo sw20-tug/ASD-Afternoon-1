@@ -58,7 +58,6 @@ public class OverviewWords extends VBox {
 
     public void initialize() {
         getVocabsGroup();
-        user_info.setVisible(false);
 
 
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
