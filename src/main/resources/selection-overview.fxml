@@ -43,16 +43,13 @@
                 </font>
             </Button>
 
-            <ScrollPane fx:id="scroll_pane" layoutX="51.0" layoutY="151.0" prefHeight="293.0" prefWidth="353.0">
-                <content>
-                    <TableView fx:id="vocab_list" prefHeight="291.0" prefWidth="351.0" editable="true">
+                    <TableView fx:id="vocab_list" layoutX="51.0" layoutY="151.0" prefHeight="293.0" prefWidth="353.0" editable="true">
                         <columns>
                             <TableColumn fx:id="vocabularyNameColumn" prefWidth="250" text="Name"/>
                             <TableColumn fx:id="checkBoxColumn" prefWidth="100" sortable="false" text="Selection"/>
                         </columns>
                     </TableView>
-                </content>
-            </ScrollPane>
+
             <Label fx:id="user_info" layoutX="67.0" layoutY="491.0" prefHeight="62.0" prefWidth="315.0" text="user_info"/>
 
         </children>

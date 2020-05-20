@@ -148,7 +148,6 @@ public class SelectionOverview extends VBox {
         for(VocabularySelectionModel v: buffer ){
             if(v.isSelected())
                 selectedItems.add(v);
-            System.out.println(selectedItems);
         }
     }
 
