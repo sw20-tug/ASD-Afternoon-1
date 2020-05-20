@@ -61,7 +61,8 @@ public class Controller extends VBox {
 
         train_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                System.out.println("vocab trainer");
+                SelectionOverview selOverview = new SelectionOverview(vocab);
+                getScene().setRoot(selOverview);
             }
         });
 
