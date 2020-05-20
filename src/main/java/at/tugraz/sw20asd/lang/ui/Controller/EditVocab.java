@@ -1,10 +1,9 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
 
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.EntryDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
@@ -16,12 +15,9 @@ import javafx.event.EventHandler;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import at.tugraz.sw20asd.lang.model.Entry;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class EditVocab extends VBox {
     @FXML
@@ -40,19 +36,22 @@ public class EditVocab extends VBox {
     private TextField category;
     private List<TextField> phrase_field_list = new ArrayList<TextField>();
     private List<TextField> translation_field_list = new ArrayList<TextField>();
+    private List<EntryDto> words = new ArrayList<>();
 
+    private Task<VocabularyDetailDto> getVocabsTask;
     private Task<Integer> edittask1;
     private Task<Integer> edittask2;
     private VocabularyAccess vocab;
-    private Vocabulary voc;
+    private VocabularyDetailDto voc;
     private int origin_scene;
 
-    private int id;
+    private long id;
     FXMLLoader loader = new FXMLLoader();
 
-    public EditVocab(VocabularyAccess vocab, Vocabulary voc, int origin_scene){
+    public EditVocab(VocabularyAccess vocab, long id, int origin_scene) {
         this.vocab = vocab;
         this.voc = voc;
+        this.id = id;
         this.origin_scene = origin_scene;
         URL location = getClass().getResource("/edit.fxml");
         loader.setControllerFactory(c -> this);
@@ -66,25 +65,9 @@ public class EditVocab extends VBox {
     }
 
 
-    public void initialize(){
+    public void initialize() {
+        getVocabsGroup();
         user_info.setVisible(false);
-        category.setText(voc.getName());
-        List<Entry> words = voc.getEntries();
-        for(int counter = 0; counter < words.size(); counter++)
-        {
-            TextField phrase = new TextField();
-            phrase.setText(words.get(counter).getPhrase());
-            phrase.setId("phrase" + phrase_field_list.size());
-            phrase_field_list.add(phrase);
-            phrase_list.getChildren().add(phrase);
-
-            TextField translation = new TextField();
-            translation.setText(words.get(counter).getTranslation());
-            translation.setId("translation" + translation_field_list.size());
-            translation_field_list.add(translation);
-            translation_list.getChildren().add(translation);
-        }
-
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
@@ -105,15 +88,11 @@ public class EditVocab extends VBox {
 
         submit_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                if(category.getText().isEmpty()){
+                if (category.getText().isEmpty()) {
                     updateUserInformation("category");
-                }
-                else if(!checkEntries())
-                {
+                } else if (!checkEntries()) {
                     updateUserInformation("entry_missing");
-                }
-                else{
-                    updateUserInformation("edited_vocab");
+                } else {
                     sendEditCommand();
                     user_info.setVisible(true);
                 }
@@ -122,11 +101,10 @@ public class EditVocab extends VBox {
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                if(origin_scene == 1){
+                if (origin_scene == 1) {
                     OverviewVocabs overview = new OverviewVocabs(vocab);
                     getScene().setRoot(overview);
-                }
-                else{
+                } else {
                     EditVocabSelection editvocabs = new EditVocabSelection(vocab);
                     getScene().setRoot(editvocabs);
                 }
@@ -134,10 +112,10 @@ public class EditVocab extends VBox {
         });
     }
 
-    private void updateUserInformation(String code){
+    private void updateUserInformation(String code) {
         user_info.setVisible(true);
         user_info.setTextFill(Color.RED);
-        switch (code){
+        switch (code) {
             case "edited_vocab":
                 user_info.setText("Vocabulary edited!");
                 break;
@@ -155,42 +133,92 @@ public class EditVocab extends VBox {
         }
     }
 
-    private void sendEditCommand(){
+    private void getVocabsGroup() {
+        //get Vocabulary group
+        getVocabsTask = new Task<VocabularyDetailDto>() {
+            @Override
+            protected VocabularyDetailDto call() throws Exception {
+                voc = vocab.getVocabulary(id);
+                return voc;
+            }
+        };
+
+        getVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED) {
+                Platform.runLater(() -> {
+                    updateUserInformation("");
+                });
+                getVocabsTask.cancel();
+            }
+
+            if (newValue == Worker.State.SUCCEEDED) {
+                if (voc == null) {
+                    Platform.runLater(() -> {
+                        updateUserInformation("No words added");
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        category.setText(voc.getName());
+                        for (EntryDto e : voc.getEntries()) {
+                            words.add(e);
+                        }
+                        for (int counter = 0; counter < words.size(); counter++) {
+                            TextField phrase = new TextField();
+                            phrase.setText(words.get(counter).getPhrase());
+                            phrase.setId("phrase" + phrase_field_list.size());
+                            phrase_field_list.add(phrase);
+                            phrase_list.getChildren().add(phrase);
+
+                            TextField translation = new TextField();
+                            translation.setText(words.get(counter).getTranslation());
+                            translation.setId("translation" + translation_field_list.size());
+                            translation_field_list.add(translation);
+                            translation_list.getChildren().add(translation);
+                        }
+                    });
+                }
+            }
+        }));
+        Thread th = new Thread(getVocabsTask);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    private void sendEditCommand() {
 
         user_info.setVisible(false);
-        List<Entry> entry_list = getEntryList();
+        List<EntryDto> entry_list = getEntryList();
 
         Locale source_lang = voc.getSourceLanguage();
         Locale target_lang = voc.getTargetLanguage();
-        Vocabulary edited_vocabulary = new Vocabulary(voc.getID(), category.getText(), source_lang, target_lang);
+        VocabularyDetailDto edited_vocabulary = new VocabularyDetailDto(null, category.getText(), source_lang, target_lang);
 
-        for(int counter = 0; counter < entry_list.size(); counter++)
-        {
-            edited_vocabulary.addPhrase(entry_list.get(counter));
+        for (int counter = 0; counter < entry_list.size(); counter++) {
+            edited_vocabulary.addEntry(entry_list.get(counter));
         }
 
-        edittask1 = new Task<Integer> () {
+        edittask1 = new Task<Integer>() {
             @Override
             protected Integer call() throws Exception {
                 int id = 0;
-                id = vocab.deleteVocabulary(voc.getID());
+                vocab.deleteVocabulary(voc.getId());
+                id = vocab.addVocabulary(edited_vocabulary);
                 return id;
             }
         };
 
-        edittask1.stateProperty().addListener(((observableValue, oldState, newState)->{
-            if(newState == Worker.State.CANCELLED){
+        edittask1.stateProperty().addListener(((observableValue, oldState, newState) -> {
+            if (newState == Worker.State.CANCELLED) {
                 edittask1.cancel();
             }
-            if(newState == Worker.State.SUCCEEDED){
+            if (newState == Worker.State.SUCCEEDED) {
                 id = edittask1.getValue();
 
-                if(id != -1){
+                if (id != -1) {
                     Platform.runLater(() -> {
-                        addVocabulary(edited_vocabulary);
+                        updateUserInformation("edited_vocab");
                     });
-                }
-                else{
+                } else {
                     Platform.runLater(() -> {
                         updateUserInformation("");
                     });
@@ -203,57 +231,20 @@ public class EditVocab extends VBox {
         th.start();
     }
 
-    private void addVocabulary(Vocabulary vocabulary){
-        user_info.setVisible(false);
-
-        edittask2 = new Task<Integer> () {
-            @Override
-            protected Integer call() throws Exception {
-                int id = 0;
-                id = vocab.addVocabulary(vocabulary);
-                return id;
-            }
-        };
-
-        edittask2.stateProperty().addListener(((observableValue, oldState, newState)->{
-            if(newState == Worker.State.CANCELLED){
-                edittask2.cancel();
-            }
-            if(newState == Worker.State.SUCCEEDED){
-                id = edittask2.getValue();
-                if(id != -1){
-                    Platform.runLater(() -> {
-                            updateUserInformation("edited_vocab");
-                    });
-                }
-                else{
-                    Platform.runLater(() -> {
-                        updateUserInformation("");
-                    });
-                }
-            }
-        }));
-        Thread th = new Thread(edittask2);
-        th.setDaemon(true);
-        th.start();
-    }
-
-    private List<Entry> getEntryList(){
-        List<Entry> entry_list = new ArrayList<>();
-        for(int counter = 0; counter < translation_field_list.size(); counter++)
-        {
-            if(!phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty()){
-                entry_list.add(new Entry(phrase_field_list.get(counter).getText(), translation_field_list.get(counter).getText()));
+    private List<EntryDto> getEntryList() {
+        List<EntryDto> entry_list = new ArrayList<>();
+        for (int counter = 0; counter < translation_field_list.size(); counter++) {
+            if (!phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty()) {
+                entry_list.add(new EntryDto(phrase_field_list.get(counter).getText(), translation_field_list.get(counter).getText()));
             }
         }
         return entry_list;
     }
 
-    private boolean checkEntries(){
-        for(int counter = 0; counter < phrase_field_list.size(); counter++)
-        {
-            if((!phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty()) ||
-                    (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty())){
+    private boolean checkEntries() {
+        for (int counter = 0; counter < phrase_field_list.size(); counter++) {
+            if ((!phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty()) ||
+                    (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty())) {
                 return false;
             }
         }

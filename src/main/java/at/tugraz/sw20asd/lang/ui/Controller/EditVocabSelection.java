@@ -1,11 +1,8 @@
 package at.tugraz.sw20asd.lang.ui.Controller;
 
-import at.tugraz.sw20asd.lang.model.Entry;
-import at.tugraz.sw20asd.lang.model.Vocabulary;
+import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -15,19 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class EditVocabSelection extends VBox {
 
@@ -41,8 +30,8 @@ public class EditVocabSelection extends VBox {
     private VocabularyAccess vocab;
 
     private Task<Integer> deletetask;
-    private Task<List<Vocabulary>> getAllVocabsTask;
-    private List<Vocabulary> Vocabularies;
+    private Task<List<VocabularyBaseDto>> getAllVocabsTask;
+    private List<VocabularyBaseDto> Vocabularies;
     private int id;
 
     public EditVocabSelection(VocabularyAccess vocab) {
@@ -73,7 +62,7 @@ public class EditVocabSelection extends VBox {
     private void getVocabs() {
         getAllVocabsTask = new Task<>() {
             @Override
-            protected List<Vocabulary> call() throws Exception {
+            protected List<VocabularyBaseDto> call() throws Exception {
                 Vocabularies = vocab.getAllVocabularies();
                 return Vocabularies;
             }
@@ -136,7 +125,7 @@ public class EditVocabSelection extends VBox {
             vocab_button.setText(Vocabularies.get(current_counter).getName());
             vocab_button.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter), 2);
+                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter).getId(), 2);
                     getScene().setRoot(edit);
                 }
             });
@@ -151,7 +140,7 @@ public class EditVocabSelection extends VBox {
             delete_button.setText("-");
             delete_button.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    sendDeleteCommand(Vocabularies.get(current_counter).getID());
+                    sendDeleteCommand(Vocabularies.get(current_counter).getId());
                     button_list.getChildren().remove(vocab_button);
                     delete_button_list.getChildren().remove(delete_button);
                 }
@@ -161,7 +150,7 @@ public class EditVocabSelection extends VBox {
 
     }
 
-    private void sendDeleteCommand(int vocab_id) {
+    private void sendDeleteCommand(long vocab_id) {
         user_info.setVisible(false);
         id = -1;
 
@@ -169,7 +158,7 @@ public class EditVocabSelection extends VBox {
             @Override
             protected Integer call() throws Exception {
                 int id = 0;
-                id = vocab.deleteVocabulary(vocab_id);
+                vocab.deleteVocabulary(vocab_id);
                 return id;
             }
         };

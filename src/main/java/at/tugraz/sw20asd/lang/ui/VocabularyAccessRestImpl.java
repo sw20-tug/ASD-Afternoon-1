@@ -55,6 +55,16 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
     }
 
     @Override
+    public void deleteVocabulary(long id) {
+        try
+        {
+            restTemplate.delete(vocabularyWithId(id));
+        }
+        catch(URISyntaxException ex){
+        }
+    }
+
+    @Override
     public VocabularyDetailDto getVocabulary(long id) {
         try
         {
