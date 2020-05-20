@@ -94,17 +94,4 @@ public class Vocabulary extends EntityBase {
                 + ", DstLang=" + targetLanguage
                 + "]";
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this)
-            return true;
-        if (!(obj instanceof Vocabulary))
-            return false;
-        Vocabulary v = (Vocabulary) obj;
-        return id.equals(v.id)
-                && name.equals(v.name)
-                && sourceLanguage.equals(v.sourceLanguage)
-                && targetLanguage.equals(v.targetLanguage);
-    }
 }
