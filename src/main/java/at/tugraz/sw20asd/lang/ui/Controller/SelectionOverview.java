@@ -96,7 +96,7 @@ public class SelectionOverview extends VBox {
         train_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 getSelection();
-                if (selectedItems.size() == 0) {
+                if (selectedItems.isEmpty()) {
                     updateUserInformation("nothing_selected");
                 }
                 //TODO switch to train, use selectedItems as param  type ObservableList<VocabularySelectionModel>
@@ -125,7 +125,7 @@ public class SelectionOverview extends VBox {
             }
 
             if (newValue == Worker.State.SUCCEEDED) {
-                if (Vocabularies == null || Vocabularies.size() == 0) {
+                if (Vocabularies == null || Vocabularies.isEmpty()) {
                     Platform.runLater(() -> {
                         updateUserInformation("no_vocabs");
                     });
