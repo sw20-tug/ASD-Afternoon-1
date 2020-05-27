@@ -79,14 +79,13 @@ public class AddVocab extends VBox {
     public void initialize() {
         user_info.setVisible(false);
         ObservableList<String> languages =
-                FXCollections.observableArrayList("German", "English", "Chinese");
+                FXCollections.observableArrayList("German", "English");
 
         from_choice.setItems(languages);
         to_choice.setItems(languages);
 
         language_map.put("German", Locale.GERMAN);
         language_map.put("English", Locale.ENGLISH);
-        language_map.put("Chinese", Locale.CHINESE);
 
 
         from_choice.valueProperty().addListener((observableValue, oldValue, newValue) -> {

@@ -85,7 +85,7 @@ public class SelectionOverview extends VBox {
         study_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 getSelection();
-                if (selectedItems.size() == 0) {
+                if (selectedItems.isEmpty()) {
                     updateUserInformation("nothing_selected");
                 }
                 //TODO switch to study, use selectedItems as param type ObservableList<VocabularySelectionModel>
@@ -131,12 +131,12 @@ public class SelectionOverview extends VBox {
                     });
                 } else {
 
-                    possibleItems = (FXCollections.observableArrayList(
+                    possibleItems = FXCollections.observableArrayList(
                             Vocabularies
                                     .stream()
                                     .map(VocabularySelectionModel::fromDto)
                                     .collect(Collectors.toList())
-                    ));
+                    );
                     //needed for selection
                     getCurrentIndexMap();
 
