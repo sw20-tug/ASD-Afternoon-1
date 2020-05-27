@@ -46,8 +46,9 @@
             <TableView fx:id="vocab_list" layoutX="51.0" layoutY="151.0" prefHeight="293.0" prefWidth="353.0"
                        editable="true">
                 <columns>
-                    <TableColumn fx:id="vocabularyNameColumn" prefWidth="250" text="Name"/>
-                    <TableColumn fx:id="checkBoxColumn" prefWidth="100" sortable="false" text="Selection"/>
+                    <TableColumn fx:id="vocabularyNameColumn" prefWidth="210" text="Name"/>
+                    <TableColumn fx:id="vocabularyTranslation" prefWidth="70" text="Language"/>
+                    <TableColumn fx:id="checkBoxColumn" prefWidth="70" sortable="false" text="Selection"/>
                 </columns>
             </TableView>
 
