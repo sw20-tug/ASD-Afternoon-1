@@ -4,6 +4,8 @@ import at.tugraz.sw20asd.lang.EntryDto;
 import at.tugraz.sw20asd.lang.VocabularyDetailDto;
 import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccess;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -19,6 +21,7 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,9 +40,15 @@ public class EditVocab extends VBox {
     private Label user_info;
     @FXML
     private TextField category;
+    @FXML
+    private ComboBox<String> from_choice;
+    @FXML
+    private ComboBox<String> to_choice;
+
     private List<TextField> phrase_field_list = new ArrayList<TextField>();
     private List<TextField> translation_field_list = new ArrayList<TextField>();
     private List<EntryDto> words = new ArrayList<>();
+    private HashMap<String, Locale> language_map = new HashMap<String, Locale>();
 
     private Task<VocabularyDetailDto> getVocabsTask;
     private Task<Integer> edittask1;
@@ -71,6 +80,37 @@ public class EditVocab extends VBox {
     public void initialize() {
         getVocabsGroup();
         user_info.setVisible(false);
+
+        ObservableList<String> languages =
+                FXCollections.observableArrayList("German", "English");
+
+        from_choice.setItems(languages);
+        to_choice.setItems(languages);
+
+        language_map.put("German", Locale.GERMAN);
+        language_map.put("English", Locale.ENGLISH);
+
+
+        from_choice.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!to_choice.getSelectionModel().isEmpty() &&
+                    (to_choice.getSelectionModel().getSelectedItem().equals(newValue))) {
+
+                updateUserInformation("equal_lang");
+            } else {
+                user_info.setVisible(false);
+            }
+        });
+
+        to_choice.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!from_choice.getSelectionModel().isEmpty() &&
+                    from_choice.getSelectionModel().getSelectedItem().equals(newValue)) {
+
+                updateUserInformation("equal_lang");
+            } else {
+                user_info.setVisible(false);
+            }
+        });
+
         add_btn.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
@@ -95,12 +135,18 @@ public class EditVocab extends VBox {
                     updateUserInformation("category");
                 } else if (!checkEntries()) {
                     updateUserInformation("entry_missing");
-                } else {
+                } else if (from_choice.getSelectionModel().isEmpty()
+                        || to_choice.getSelectionModel().isEmpty()){
+                    updateUserInformation("missing_selection");
+                } else if (from_choice.getSelectionModel().getSelectedItem().equals(to_choice.getSelectionModel().getSelectedItem())){
+                    updateUserInformation("equal_lang");
+                } else{
                     sendEditCommand();
                     user_info.setVisible(true);
                 }
             }
         });
+
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
@@ -133,6 +179,9 @@ public class EditVocab extends VBox {
                 break;
             case "category":
                 user_info.setText("Please fill out the Name of your Vocabulary group");
+                break;
+            case "equal_lang":
+                user_info.setText("Please select another language");
                 break;
             default:
                 user_info.setText("Sorry, something went wrong");
@@ -195,8 +244,12 @@ public class EditVocab extends VBox {
         user_info.setVisible(false);
         List<EntryDto> entry_list = getEntryList();
 
-        Locale source_lang = voc.getSourceLanguage();
-        Locale target_lang = voc.getTargetLanguage();
+        String from_lang = from_choice.getSelectionModel().getSelectedItem();
+        String to_lang = to_choice.getSelectionModel().getSelectedItem();
+
+        Locale source_lang = language_map.get(from_lang);
+        Locale target_lang = language_map.get(to_lang);
+
         VocabularyDetailDto edited_vocabulary = new VocabularyDetailDto(null, category.getText(), source_lang, target_lang);
 
         for (int counter = 0; counter < entry_list.size(); counter++) {
