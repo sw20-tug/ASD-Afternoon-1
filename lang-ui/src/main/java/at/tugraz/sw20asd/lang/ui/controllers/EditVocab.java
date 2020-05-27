@@ -126,7 +126,10 @@ public class EditVocab extends VBox {
                 user_info.setText("Please fill out the amount");
                 break;
             case "entry_missing":
-                user_info.setText("Please check if you have entered" + "\n" + "a matching To for each From in the same line");
+                user_info.setText("Please leave no textfields empty");
+                break;
+            case "empty_textfields":
+                user_info.setText("Please check leave no textfields empty");
                 break;
             case "category":
                 user_info.setText("Please fill out the Name of your Vocabulary group");
@@ -247,7 +250,8 @@ public class EditVocab extends VBox {
     private boolean checkEntries() {
         for (int counter = 0; counter < phrase_field_list.size(); counter++) {
             if ((!phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty()) ||
-                    (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty())) {
+                 (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty()) ||
+                 (phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty())){
                 return false;
             }
         }
