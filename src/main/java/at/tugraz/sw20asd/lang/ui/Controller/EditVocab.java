@@ -176,14 +176,8 @@ public class EditVocab extends VBox {
             case "edited_vocab":
                 user_info.setText("Vocabulary edited!");
                 break;
-            case "amount_missing":
-                user_info.setText("Please fill out the amount");
-                break;
             case "entry_missing":
                 user_info.setText("Please leave no textfields empty");
-                break;
-            case "empty_textfields":
-                user_info.setText("Please check leave no textfields empty");
                 break;
             case "category":
                 user_info.setText("Please fill out the Name of your Vocabulary group");

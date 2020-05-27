@@ -32,8 +32,16 @@ class EditVocabTest extends LangUiTestBase {
     public void testEdit(FxRobot robot) {
         robot.clickOn("#add_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
-        robot.clickOn("#phrase0").write("Apfel");
-        robot.clickOn("#translation0").write("apple");
+        robot.clickOn("#phrase3").write("Apfel");
+        robot.clickOn("#submit_btn");
+        WaitForAsyncUtils.waitForFxEvents(100);
+        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please leave no textfields empty"));
+    }
+
+    @Test
+    public void testEdit1(FxRobot robot) {
+        robot.clickOn("#category").eraseText(4);
+        WaitForAsyncUtils.waitForFxEvents(100);
         robot.clickOn("#submit_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
         FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please fill out the Name of your Vocabulary group"));
@@ -41,16 +49,10 @@ class EditVocabTest extends LangUiTestBase {
 
     @Test
     public void testEdit2(FxRobot robot) {
-        robot.clickOn("#add_btn");
-        WaitForAsyncUtils.waitForFxEvents(100);
-        robot.clickOn("#from_choice").dropTo("German").clickOn("German");
-        robot.clickOn("#to_choice").dropTo("English").clickOn("English");
-        robot.clickOn("#category").write("Food");
-        robot.clickOn("#phrase0").write("Apfel");
-        robot.clickOn("#translation0").write("apple");
+        robot.clickOn("#from_choice").dropTo("English").clickOn("English");
         robot.clickOn("#submit_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
-        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Sorry, something went wrong"));
+        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please select another language"));
     }
 
 }
