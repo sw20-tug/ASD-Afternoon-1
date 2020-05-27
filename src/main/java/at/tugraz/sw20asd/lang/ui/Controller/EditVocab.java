@@ -52,15 +52,20 @@ public class EditVocab extends VBox {
 
     private Task<VocabularyDetailDto> getVocabsTask;
     private Task<Integer> edittask1;
-    private Task<Integer> edittask2;
     private VocabularyAccess vocab;
     private VocabularyDetailDto voc;
-    private int origin_scene;
+    private Mode origin_scene;
 
     private long id;
     FXMLLoader loader = new FXMLLoader();
 
-    public EditVocab(VocabularyAccess vocab, long id, int origin_scene) {
+    enum Mode {
+        OVERVIEW,
+        EDIT,
+        TEST,
+    }
+
+    public EditVocab(VocabularyAccess vocab, long id, Mode origin_scene) {
         this.vocab = vocab;
         this.voc = voc;
         this.id = id;
@@ -158,7 +163,7 @@ public class EditVocab extends VBox {
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                if (origin_scene == 1) {
+                if (origin_scene == Mode.OVERVIEW) {
                     OverviewVocabs overview = new OverviewVocabs(vocab);
                     getScene().setRoot(overview);
                 } else {
@@ -192,7 +197,7 @@ public class EditVocab extends VBox {
 
     private void getVocabsGroup() {
         //get Vocabulary group
-        if (origin_scene == 3) {
+        if (origin_scene == Mode.TEST) {
 
             category.setText("Pets");
 
@@ -231,9 +236,7 @@ public class EditVocab extends VBox {
                             from_choice.getSelectionModel().select(0);
                             to_choice.getSelectionModel().select(1);
 
-                            for (EntryDto e : voc.getEntries()) {
-                                words.add(e);
-                            }
+                            words.addAll(voc.getEntries());
                             initiateGUI(words);
                         });
                     }
@@ -306,7 +309,7 @@ public class EditVocab extends VBox {
                 if (id != -1) {
                     Platform.runLater(() -> {
                         updateUserInformation("edited_vocab");
-                        if (origin_scene == 1) {
+                        if (origin_scene == Mode.OVERVIEW) {
                             OverviewVocabs overview = new OverviewVocabs(vocab);
                             getScene().setRoot(overview);
                         } else {

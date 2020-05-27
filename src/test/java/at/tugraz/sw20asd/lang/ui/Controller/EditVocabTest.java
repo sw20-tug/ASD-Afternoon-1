@@ -22,7 +22,7 @@ class EditVocabTest extends LangUiTestBase {
     @Start
     public void start(Stage stage) throws Exception {
         vocab = new VocabularyAccessRestImpl("localhost", 8080);
-        Parent root = new EditVocab(vocab, 0, 3);
+        Parent root = new EditVocab(vocab, 0, EditVocab.Mode.TEST);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

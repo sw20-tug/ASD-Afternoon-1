@@ -127,7 +127,7 @@ public class EditVocabSelection extends VBox {
             vocab_button.setText(Vocabularies.get(current_counter).getName());
             vocab_button.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter).getId(), 2);
+                    EditVocab edit = new EditVocab(vocab, Vocabularies.get(current_counter).getId(), EditVocab.Mode.EDIT);
                     getScene().setRoot(edit);
                 }
             });
