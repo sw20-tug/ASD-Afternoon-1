@@ -49,10 +49,9 @@ class EditVocabTest extends LangUiTestBase {
 
     @Test
     public void testEdit2(FxRobot robot) {
-        robot.clickOn("#from_choice").dropTo("English").clickOn("English");
         robot.clickOn("#submit_btn");
         WaitForAsyncUtils.waitForFxEvents(100);
-        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("Please select another language"));
+        FxAssert.verifyThat("#user_info", LabeledMatchers.hasText("User Information"));
     }
 
 }
