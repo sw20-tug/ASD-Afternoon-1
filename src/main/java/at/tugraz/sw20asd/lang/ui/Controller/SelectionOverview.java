@@ -4,8 +4,10 @@ import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.models.VocabularySelectionModel;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -20,6 +22,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +34,8 @@ public class SelectionOverview extends VBox {
     private List<VocabularyBaseDto> Vocabularies;
     private Task<List<VocabularyBaseDto>> getAllVocabsTask;
     private ObservableList<VocabularySelectionModel> selectedItems = FXCollections.observableArrayList();
-
+    private ObservableList<VocabularySelectionModel> possibleItems = FXCollections.observableArrayList();
+    private ObservableMap<Integer, VocabularySelectionModel> indexMap = FXCollections.observableHashMap();
 
     @FXML
     private Button return_btn;
@@ -45,6 +49,8 @@ public class SelectionOverview extends VBox {
     private TableView<VocabularySelectionModel> vocab_list;
     @FXML
     private TableColumn<VocabularySelectionModel, String> vocabularyNameColumn;
+    @FXML
+    private TableColumn<VocabularySelectionModel, String> vocabularyTranslation;
     @FXML
     private TableColumn<VocabularySelectionModel, Boolean> checkBoxColumn;
 
@@ -66,9 +72,7 @@ public class SelectionOverview extends VBox {
     public void initialize() {
         user_info.setVisible(false);
         selectedItems.clear();
-        //initialize TableView
-        initListView();
-        //get vocabs
+        initTableView();
         getVocabGroups();
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -81,13 +85,23 @@ public class SelectionOverview extends VBox {
         study_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 getSelection();
+                if (selectedItems.size() == 0) {
+                    updateUserInformation("nothing_selected");
+                }
                 //TODO switch to study, use selectedItems as param type ObservableList<VocabularySelectionModel>
+                //take care you get a mixed list (e.g. DE - EN and EN - DE are allowed)
+                //think about how to handle it
             }
         });
         train_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 getSelection();
+                if (selectedItems.size() == 0) {
+                    updateUserInformation("nothing_selected");
+                }
                 //TODO switch to train, use selectedItems as param  type ObservableList<VocabularySelectionModel>
+                //take care you get a mixed list (e.g. DE - EN and EN - DE are allowed)
+                //think about how to handle it
             }
         });
     }
@@ -116,13 +130,18 @@ public class SelectionOverview extends VBox {
                         updateUserInformation("no_vocabs");
                     });
                 } else {
+
+                    possibleItems = (FXCollections.observableArrayList(
+                            Vocabularies
+                                    .stream()
+                                    .map(VocabularySelectionModel::fromDto)
+                                    .collect(Collectors.toList())
+                    ));
+                    //needed for selection
+                    getCurrentIndexMap();
+
                     Platform.runLater(() -> {
-                        vocab_list.setItems(FXCollections.observableArrayList(
-                                Vocabularies
-                                        .stream()
-                                        .map(VocabularySelectionModel::fromDto)
-                                        .collect(Collectors.toList())
-                        ));
+                        vocab_list.setItems(possibleItems);
                     });
 
                 }
@@ -134,27 +153,86 @@ public class SelectionOverview extends VBox {
         th.start();
     }
 
-    private void initListView() {
-        vocabularyNameColumn.setCellValueFactory(new PropertyValueFactory<>("VocabularyName"));
-        checkBoxColumn.setCellFactory(CheckBoxTableCell.forTableColumn(checkBoxColumn));
+    //Callback <ReturnType, ParameterType>
+    //allows to pass a method indirectly to a class or method
+    private void initTableView() {
+        vocabularyNameColumn.setCellValueFactory(new PropertyValueFactory<>("vocabularyName"));
+        vocabularyTranslation.setCellValueFactory(new PropertyValueFactory<>("vocabularyTranslation"));
+        checkBoxColumn.setCellFactory(CheckBoxTableCell.forTableColumn(new Callback<Integer, ObservableValue<Boolean>>() {
+
+            //callback function -> cellValueFactory should return a boolean property (reset to default or other state)
+            //checkbox state is bidirectionally bound to the boolean property
+            @Override
+            public ObservableValue<Boolean> call(Integer index) {
+
+                //get my boolean property of my model
+                ObservableValue<Boolean> itemBoolean = indexMap.get(index).selectedProperty();
+                getCurrentIndexMap();
+                //register listener to change my values
+                itemBoolean.addListener(change -> {
+                    getSelection();
+                    VocabularySelectionModel currentElement = indexMap.get(index);
+
+                    if (currentElement.isSelected()) {
+                        String src = currentElement.getVocabularySrc();
+                        String target = currentElement.getVocabularyTarget();
+                        ObservableList<VocabularySelectionModel> buffer = FXCollections.observableArrayList(possibleItems);
+                        possibleItems.clear();
+
+                        for (VocabularySelectionModel v : buffer) {
+                            if ((v.getVocabularySrc().equals(src) || v.getVocabularySrc().equals(target)) &&
+                                    (v.getVocabularyTarget().equals(src) || v.getVocabularyTarget().equals(target))) {
+                                possibleItems.add(v);
+                            }
+                        }
+                    } else {
+                        //if nothing is selected reset table
+                        if (selectedItems.size() <= 0) {
+                            possibleItems = FXCollections.observableArrayList(
+                                    Vocabularies
+                                            .stream()
+                                            .map(VocabularySelectionModel::fromDto)
+                                            .collect(Collectors.toList())
+                            );
+                        }
+
+                    }
+                    vocab_list.setItems(possibleItems);
+                    getCurrentIndexMap();
+                });
+                return itemBoolean;
+            }
+        }));
         checkBoxColumn.setCellValueFactory(new PropertyValueFactory<>("selected"));
     }
 
     private void getSelection() {
+        selectedItems.clear();
         List<VocabularySelectionModel> buffer = vocab_list.getItems();
         for (VocabularySelectionModel v : buffer) {
-            if (v.isSelected())
+            if (v.isSelected()) {
                 selectedItems.add(v);
+            }
+        }
+    }
+
+    private void getCurrentIndexMap() {
+        int counter = 0;
+        for (VocabularySelectionModel v : possibleItems) {
+            indexMap.put(counter, v);
+            counter++;
         }
     }
 
     private void updateUserInformation(String code) {
-
         user_info.setVisible(true);
         user_info.setTextFill(Color.RED);
         switch (code) {
             case "no_vocabs":
                 user_info.setText("You haven`t added any vocab yet!");
+                break;
+            case "nothing_selected":
+                user_info.setText("Please select at least one vocabulary group!");
                 break;
             default:
                 user_info.setText("Sorry, something went wrong");
@@ -164,7 +242,11 @@ public class SelectionOverview extends VBox {
     private void clear() {
         getAllVocabsTask.cancel();
         selectedItems.clear();
+        possibleItems.clear();
         Vocabularies.clear();
+        indexMap.clear();
         vocab_list.getItems().clear();
+        user_info.setVisible(false);
+
     }
 }
