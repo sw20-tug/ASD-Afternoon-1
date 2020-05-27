@@ -17,19 +17,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
 import javafx.scene.paint.Color;
 
 public class EditVocab extends VBox {
     @FXML
     private VBox phrase_list;
-    @FXML
-    private VBox translation_list;
     @FXML
     private Button add_btn;
     @FXML
@@ -121,7 +121,7 @@ public class EditVocab extends VBox {
                 Label label = new Label("");
                 label.setMinWidth(20);
                 phrase.setId("phrase" + phrase_field_list.size());
-                setMargin(entry, new Insets(5,0,0,0));
+                setMargin(entry, new Insets(5, 0, 0, 0));
                 phrase_field_list.add(phrase);
                 phrase_list.getChildren().add(entry);
                 entry.getChildren().add(phrase);
@@ -131,7 +131,7 @@ public class EditVocab extends VBox {
                 translation.setText("");
                 translation.setId("translation" + translation_field_list.size());
                 translation_field_list.add(translation);
-                setMargin(translation, new Insets(0,0,0,20));
+                setMargin(translation, new Insets(0, 0, 0, 20));
                 entry.getChildren().add(translation);
             }
         });
@@ -144,11 +144,11 @@ public class EditVocab extends VBox {
                 } else if (!checkEntries()) {
                     updateUserInformation("entry_missing");
                 } else if (from_choice.getSelectionModel().isEmpty()
-                        || to_choice.getSelectionModel().isEmpty()){
+                        || to_choice.getSelectionModel().isEmpty()) {
                     updateUserInformation("missing_selection");
-                } else if (from_choice.getSelectionModel().getSelectedItem().equals(to_choice.getSelectionModel().getSelectedItem())){
+                } else if (from_choice.getSelectionModel().getSelectedItem().equals(to_choice.getSelectionModel().getSelectedItem())) {
                     updateUserInformation("equal_lang");
-                } else{
+                } else {
                     sendEditCommand();
                     user_info.setVisible(true);
                 }
@@ -198,65 +198,81 @@ public class EditVocab extends VBox {
 
     private void getVocabsGroup() {
         //get Vocabulary group
-        getVocabsTask = new Task<VocabularyDetailDto>() {
-            @Override
-            protected VocabularyDetailDto call() throws Exception {
-                voc = vocab.getVocabulary(id);
-                return voc;
-            }
-        };
+        if (origin_scene == 3) {
 
-        getVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED) {
-                Platform.runLater(() -> {
-                    updateUserInformation("");
-                });
-                getVocabsTask.cancel();
-            }
+            category.setText("Pets");
 
-            if (newValue == Worker.State.SUCCEEDED) {
-                if (voc == null) {
-                    Platform.runLater(() -> {
-                        updateUserInformation("No words added");
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        category.setText(voc.getName());
-
-                        from_choice.getSelectionModel().select(0);
-                        to_choice.getSelectionModel().select(1);
-
-                        for (EntryDto e : voc.getEntries()) {
-                            words.add(e);
-                        }
-                        for (int counter = 0; counter < words.size(); counter++) {
-                            HBox entry = new HBox();
-                            entry.setMinHeight(30);
-                            entry.setAlignment(Pos.TOP_CENTER);
-                            TextField phrase = new TextField();
-                            phrase.setText(words.get(counter).getPhrase());
-                            phrase.setId("phrase" + phrase_field_list.size());
-                            Label label = new Label("");
-                            label.setMinWidth(20);
-                            setMargin(entry, new Insets(5,0,0,0));
-                            phrase_field_list.add(phrase);
-                            phrase_list.getChildren().add(entry);
-                            entry.getChildren().add(phrase);
-                            entry.getChildren().add(label);
-
-                            TextField translation = new TextField();
-                            translation.setText(words.get(counter).getTranslation());
-                            translation.setId("translation" + translation_field_list.size());
-                            translation_field_list.add(translation);
-                            entry.getChildren().add(translation);
-                        }
-                    });
+            from_choice.getSelectionModel().select(0);
+            to_choice.getSelectionModel().select(1);
+            words.add(new EntryDto("Hund", "dog"));
+            words.add(new EntryDto("Katze", "cat"));
+            words.add(new EntryDto("Fisch", "fish"));
+            initiateGUI(words);
+        } else {
+            getVocabsTask = new Task<VocabularyDetailDto>() {
+                @Override
+                protected VocabularyDetailDto call() throws Exception {
+                    voc = vocab.getVocabulary(id);
+                    return voc;
                 }
-            }
-        }));
-        Thread th = new Thread(getVocabsTask);
-        th.setDaemon(true);
-        th.start();
+            };
+
+            getVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
+                if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED) {
+                    Platform.runLater(() -> {
+                        updateUserInformation("");
+                    });
+                    getVocabsTask.cancel();
+                }
+
+                if (newValue == Worker.State.SUCCEEDED) {
+                    if (voc == null) {
+                        Platform.runLater(() -> {
+                            updateUserInformation("No words added");
+                        });
+                    } else {
+                        Platform.runLater(() -> {
+                            category.setText(voc.getName());
+
+                            from_choice.getSelectionModel().select(0);
+                            to_choice.getSelectionModel().select(1);
+
+                            for (EntryDto e : voc.getEntries()) {
+                                words.add(e);
+                            }
+                            initiateGUI(words);
+                        });
+                    }
+                }
+            }));
+            Thread th = new Thread(getVocabsTask);
+            th.setDaemon(true);
+            th.start();
+        }
+    }
+
+    private void initiateGUI(List<EntryDto> words) {
+        for (int counter = 0; counter < words.size(); counter++) {
+            HBox entry = new HBox();
+            entry.setMinHeight(30);
+            entry.setAlignment(Pos.TOP_CENTER);
+            TextField phrase = new TextField();
+            phrase.setText(words.get(counter).getPhrase());
+            phrase.setId("phrase" + phrase_field_list.size());
+            Label label = new Label("");
+            label.setMinWidth(20);
+            setMargin(entry, new Insets(5, 0, 0, 0));
+            phrase_field_list.add(phrase);
+            phrase_list.getChildren().add(entry);
+            entry.getChildren().add(phrase);
+            entry.getChildren().add(label);
+
+            TextField translation = new TextField();
+            translation.setText(words.get(counter).getTranslation());
+            translation.setId("translation" + translation_field_list.size());
+            translation_field_list.add(translation);
+            entry.getChildren().add(translation);
+        }
     }
 
     private void sendEditCommand() {
@@ -296,6 +312,13 @@ public class EditVocab extends VBox {
                 if (id != -1) {
                     Platform.runLater(() -> {
                         updateUserInformation("edited_vocab");
+                        if (origin_scene == 1) {
+                            OverviewVocabs overview = new OverviewVocabs(vocab);
+                            getScene().setRoot(overview);
+                        } else {
+                            EditVocabSelection editvocabs = new EditVocabSelection(vocab);
+                            getScene().setRoot(editvocabs);
+                        }
                     });
                 } else {
                     Platform.runLater(() -> {
@@ -323,7 +346,7 @@ public class EditVocab extends VBox {
     private boolean checkEntries() {
         for (int counter = 0; counter < phrase_field_list.size(); counter++) {
             if ((!phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty()) ||
-                 (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty())){
+                    (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty())) {
                 return false;
             }
         }
