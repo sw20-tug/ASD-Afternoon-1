@@ -78,7 +78,6 @@ public class EditVocab extends VBox {
 
 
     public void initialize() {
-        getVocabsGroup();
         user_info.setVisible(false);
 
         ObservableList<String> languages =
@@ -90,6 +89,7 @@ public class EditVocab extends VBox {
         language_map.put("German", Locale.GERMAN);
         language_map.put("English", Locale.ENGLISH);
 
+        getVocabsGroup();
 
         from_choice.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             if (!to_choice.getSelectionModel().isEmpty() &&
@@ -222,6 +222,10 @@ public class EditVocab extends VBox {
                 } else {
                     Platform.runLater(() -> {
                         category.setText(voc.getName());
+
+                        from_choice.getSelectionModel().select(0);
+                        to_choice.getSelectionModel().select(1);
+
                         for (EntryDto e : voc.getEntries()) {
                             words.add(e);
                         }
@@ -319,8 +323,7 @@ public class EditVocab extends VBox {
     private boolean checkEntries() {
         for (int counter = 0; counter < phrase_field_list.size(); counter++) {
             if ((!phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty()) ||
-                 (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty()) ||
-                 (phrase_field_list.get(counter).getText().isEmpty() && translation_field_list.get(counter).getText().isEmpty())){
+                 (phrase_field_list.get(counter).getText().isEmpty() && !translation_field_list.get(counter).getText().isEmpty())){
                 return false;
             }
         }
