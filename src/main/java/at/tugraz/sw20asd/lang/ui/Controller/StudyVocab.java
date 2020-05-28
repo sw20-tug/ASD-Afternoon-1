@@ -3,6 +3,8 @@ package at.tugraz.sw20asd.lang.ui.Controller;
 import at.tugraz.sw20asd.lang.dto.EntryDto;
 import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
+import at.tugraz.sw20asd.lang.ui.models.VocabularySelectionModel;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -53,11 +55,11 @@ public class StudyVocab extends VBox {
     private List<EntryDto> words = new ArrayList<>();
 
     private VocabularyAccess vocab;
-    private List<VocabularyDetailDto> voc;
+    private ObservableList<VocabularySelectionModel> voc;
     private String study_language;
     FXMLLoader loader = new FXMLLoader();
 
-    public StudyVocab(VocabularyAccess vocab, List<VocabularyDetailDto> voc) {
+    public StudyVocab(VocabularyAccess vocab, ObservableList<VocabularySelectionModel> voc) {
         this.vocab = vocab;
         this.voc = voc;
         URL location = getClass().getResource("/study.fxml");
