@@ -224,5 +224,3 @@ public class StudyVocab extends VBox {
             });
         }
     }
-
-
