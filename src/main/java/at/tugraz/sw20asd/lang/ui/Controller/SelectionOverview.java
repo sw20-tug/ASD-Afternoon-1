@@ -99,9 +99,10 @@ public class SelectionOverview extends VBox {
                 if (selectedItems.isEmpty()) {
                     updateUserInformation("nothing_selected");
                 }
-                //TODO switch to train, use selectedItems as param  type ObservableList<VocabularySelectionModel>
-                //take care you get a mixed list (e.g. DE - EN and EN - DE are allowed)
-                //think about how to handle it
+                else{
+                    Testing test = new Testing(vocab, selectedItems);
+                    getScene().setRoot(test);
+                }
             }
         });
     }
