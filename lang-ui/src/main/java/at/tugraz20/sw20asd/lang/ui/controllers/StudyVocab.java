@@ -82,7 +82,6 @@ public class StudyVocab extends VBox {
 
     public void initialize() {
         user_info.setVisible(false);
-        study_label.setText(study_language);
         show_all_btn.setVisible(false);
         switch_btn.setVisible(false);
         given_label.setVisible(false);
@@ -135,21 +134,27 @@ public class StudyVocab extends VBox {
     private void switchLanguage() {
         show_all_btn.setText("Hide All Answers");
         showAllAnswers();
+        String new_given_language = study_label.getText();
+        String new_study_language = given_label.getText();
+        given_label.setText(new_given_language);
+        study_label.setText(new_study_language);
         for (int counter = 0; counter < given_label_list.size(); counter++) {
             String new_answer = given_label_list.get(counter).getText();
             String new_given = answer_label_list.get(counter).getText();
-            String new_given_language = study_label.getText();
-            String new_study_language = given_label.getText();
-
             given_label_list.get(counter).setText(new_given);
             answer_label_list.get(counter).setText(new_answer);
-            given_label.setText(new_given_language);
-            study_label.setText(new_study_language);
         }
     }
 
     private void populate() {
         user_info.setVisible(false);
+        study_label.setText(study_language);
+        if(study_language == language1) {
+            given_label.setText(language2);
+        }
+        else {
+            given_label.setText(language1);
+        }
         show_all_btn.setVisible(true);
         switch_btn.setVisible(true);
         given_label.setVisible(true);
@@ -164,7 +169,7 @@ public class StudyVocab extends VBox {
 
             String given_str;
             String answer_str;
-            if (study_language.equals("de")) {
+            if (study_language.equals(language1)) {
                 given_str = words.get(counter).getTranslation();
                 answer_str = words.get(counter).getPhrase();
             } else {
