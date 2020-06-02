@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -77,6 +78,16 @@ public class VocabularyAccessRestImpl implements VocabularyAccess {
         } catch(URISyntaxException ex) {
             return null;
         }
+    }
+
+    @Override
+    public List<VocabularyDetailDto> getVocabularyList(List<Long> ids) {
+        List<VocabularyDetailDto> vocabularyList = new ArrayList<>();
+        for(long i : ids){
+            vocabularyList.add(getVocabulary(i));
+        }
+        return vocabularyList;
+
     }
 
     private URI vocabularyWithId(long id) throws URISyntaxException {

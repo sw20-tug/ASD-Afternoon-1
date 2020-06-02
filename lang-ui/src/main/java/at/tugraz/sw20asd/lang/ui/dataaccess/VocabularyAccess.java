@@ -14,5 +14,7 @@ public interface VocabularyAccess {
 
     VocabularyDetailDto getVocabulary(long id);
 
+    List<VocabularyDetailDto> getVocabularyList(List<Long> ids);
+
     List<VocabularyBaseDto> getAllVocabularies();
 }

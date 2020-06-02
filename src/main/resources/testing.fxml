@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root alignment="TOP_CENTER" prefHeight="600.0" prefWidth="500.0"
+         style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;"
+         type="VBox" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="at.tugraz.sw20asd.lang.ui.Controller.Testing">
+
+    <AnchorPane fx:id="anchor_pane" prefHeight="602.0" prefWidth="800.0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <children>
+
+            <Label fx:id="title" alignment="CENTER" layoutX="63.0" layoutY="75.0" maxWidth="-Infinity" prefHeight="42.0"
+                   prefWidth="350" text="Train your vocabulary" textAlignment="CENTER">
+                <font>
+                    <Font name="Abyssinica SIL" size="30.0"/>
+                </font>
+            </Label>
+
+            <Label fx:id="lang_label" layoutX="65.0" layoutY="149.0" text="Select language">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0"/>
+                </font>
+            </Label>
+            <ComboBox fx:id="language_choice" layoutX="270.0" layoutY="146.0" prefHeight="26.0" prefWidth="145.0"/>
+            <Button fx:id="start_button" layoutX="351.0" layoutY="184.0" mnemonicParsing="false" prefHeight="40.0"
+                    prefWidth="64.0" text="Start">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0"/>
+                </font>
+            </Button>
+
+            <Label fx:id="current_vocab" layoutX="63.0" layoutY="290.0" prefHeight="17.0" prefWidth="145.0"
+                   text="Vocabulary">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0"/>
+                </font>
+            </Label>
+
+            <TextField fx:id="input_field" layoutX="270.0" layoutY="290.0" prefHeight="26.0" prefWidth="145.0"/>
+
+            <Button fx:id="return_btn" layoutX="65.0" layoutY="464.0" prefHeight="40.0" prefWidth="70.0" text="Return">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0"/>
+                </font>
+            </Button>
+
+            <Button fx:id="continue_btn" layoutX="328.0" layoutY="464.0" prefHeight="40.0" prefWidth="87.0"
+                    text="Continue">
+                <font>
+                    <Font name="Abyssinica SIL" size="16.0"/>
+                </font>
+            </Button>
+            <Line endX="171.1016387939453" endY="-0.8284531831741333" layoutX="245.0" layoutY="130.0"
+                  startX="-180.19125366210938" startY="-0.8284209966659546" strokeMiterLimit="20.0"/>
+            <Label fx:id="user_info" layoutX="58.0" layoutY="360.0" prefHeight="37.0" prefWidth="364.0"
+                   text="User_info">
+                <font>
+                    <Font name="Abyssinica SIL" size="14.0"/>
+                </font>
+            </Label>
+            <ProgressIndicator fx:id="progress_bar" layoutX="422.0" layoutY="184.0" prefHeight="62.0" prefWidth="52.0"
+                               progress="0.0"/>
+
+        </children>
+    </AnchorPane>
+
+</fx:root>
