@@ -1,7 +1,7 @@
-package at.tugraz.sw20asd.lang.ui.Controller;
+package at.tugraz.sw20asd.lang.ui.controllers;
 
-import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
-import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
+import at.tugraz.sw20asd.lang.VocabularyBaseDto;
+import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.models.VocabularySelectionModel;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -88,9 +88,6 @@ public class SelectionOverview extends VBox {
                 if (selectedItems.isEmpty()) {
                     updateUserInformation("nothing_selected");
                 }
-                //TODO switch to study, use selectedItems as param type ObservableList<VocabularySelectionModel>
-                //take care you get a mixed list (e.g. DE - EN and EN - DE are allowed)
-                //think about how to handle it
                 StudyVocab study = new StudyVocab(vocab, selectedItems);
                 getScene().setRoot(study);
             }

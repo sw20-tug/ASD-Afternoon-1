@@ -190,6 +190,8 @@ public class EditVocabSelection extends VBox {
     }
 
     private void clearEditVocabs() {
-        Vocabularies.clear();
+        if(Vocabularies != null){
+            Vocabularies.clear();
+        }
     }
 }

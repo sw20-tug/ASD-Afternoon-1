@@ -1,8 +1,8 @@
-package at.tugraz.sw20asd.lang.ui.Controller;
+package at.tugraz.sw20asd.lang.ui.controllers;
 
-import at.tugraz.sw20asd.lang.dto.EntryDto;
-import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
-import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
+import at.tugraz.sw20asd.lang.EntryDto;
+import at.tugraz.sw20asd.lang.VocabularyDetailDto;
+import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.models.VocabularySelectionModel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
