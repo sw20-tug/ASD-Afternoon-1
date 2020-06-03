@@ -122,6 +122,10 @@ public class Testing extends VBox {
 
     //function to get the entries of the selected vocabulary groups
     private void getEntryList() {
+        if(!counterMap.isEmpty() || !entries.isEmpty()){
+            counterMap.clear();
+            entries.clear();
+        }
         entries = new HashMap<>();
         progress_bar.setVisible(true);
         List<Long> ids = new ArrayList<>();
@@ -155,7 +159,8 @@ public class Testing extends VBox {
                         for (EntryDto curEntry : entry) {
                             entries.put(length, curEntry);
                             languageMap.put(length, entryDto.getSourceLanguage().toString());
-                            counterMap.put(curEntry.getId(), 0);
+
+                            counterMap.put(curEntry.getId(), 1);
                             length++;
                         }
                     }
@@ -243,8 +248,10 @@ public class Testing extends VBox {
             EntryDto entry = entries.get(randomizedIntegerList.get(counter));
             setCorrectVocabSet(entry);
         } else {
-            System.out.println("change needed");
-            //TODO switch to result page
+
+            TestingResult t = new TestingResult(vocab, Vocabularies, entries, counterMap);
+            getScene().setRoot(t);
+
         }
 
     }
