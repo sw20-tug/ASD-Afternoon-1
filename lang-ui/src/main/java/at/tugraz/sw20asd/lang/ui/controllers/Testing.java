@@ -1,8 +1,9 @@
-package at.tugraz.sw20asd.lang.ui.Controller;
+package at.tugraz.sw20asd.lang.ui.controllers;
 
-import at.tugraz.sw20asd.lang.dto.EntryDto;
-import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
-import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
+
+import at.tugraz.sw20asd.lang.EntryDto;
+import at.tugraz.sw20asd.lang.VocabularyDetailDto;
+import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccess;
 import at.tugraz.sw20asd.lang.ui.models.VocabularySelectionModel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -113,6 +114,7 @@ public class Testing extends VBox {
             public void handle(ActionEvent event) {
                 validateAnswer();
                 input_field.clear();
+                userInputString = null;
                 startTraining();
             }
         });
@@ -179,20 +181,20 @@ public class Testing extends VBox {
     // if -> remove the currently used randomized integer from the list -> don't test correct vocabularies twice
     private void validateAnswer() {
         if (languageMap.get(randomizedIntegerList.get(counter)).equals(selectedLang)) {
-            if (userInputString.equals(currentTestVocabulary.getTranslation())) {
-                randomizedIntegerList.remove(counter);
-                setOffset("removed");
-            } else {
+            if (userInputString == null || !userInputString.equals(currentTestVocabulary.getTranslation())) {
                 increaseRepetitions();
                 setOffset("failed");
+            } else {
+                randomizedIntegerList.remove(counter);
+                setOffset("removed");
             }
         } else {
-            if (userInputString.equals(currentTestVocabulary.getPhrase())) {
-                randomizedIntegerList.remove(counter);
-                setOffset("removed");
-            } else {
+            if (userInputString == null || !userInputString.equals(currentTestVocabulary.getPhrase())) {
                 increaseRepetitions();
                 setOffset("failed");
+            } else {
+                randomizedIntegerList.remove(counter);
+                setOffset("removed");
             }
         }
     }

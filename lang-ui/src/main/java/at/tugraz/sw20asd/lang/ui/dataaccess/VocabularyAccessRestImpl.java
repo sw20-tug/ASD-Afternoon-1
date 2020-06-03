@@ -1,7 +1,7 @@
-package at.tugraz.sw20asd.lang.ui;
+package at.tugraz.sw20asd.lang.ui.dataaccess;
 
-import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
-import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
+import at.tugraz.sw20asd.lang.VocabularyBaseDto;
+import at.tugraz.sw20asd.lang.VocabularyDetailDto;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
