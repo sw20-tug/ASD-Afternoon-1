@@ -1,4 +1,4 @@
-package at.tugraz20.sw20asd.lang.ui.controllers;
+package at.tugraz.sw20asd.lang.ui.controllers;
 import javafx.stage.Stage;
 
 import org.junit.jupiter.api.*;

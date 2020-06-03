@@ -1,4 +1,4 @@
-package at.tugraz20.sw20asd.lang.ui.models;
+package at.tugraz.sw20asd.lang.ui.models;
 
 import at.tugraz.sw20asd.lang.EntryDto;
 import javafx.beans.property.SimpleLongProperty;

@@ -41,7 +41,7 @@
   </dependencyManagement>
 
   <modules>
-	<module>lang-common</module>
+    <module>lang-common</module>
     <module>lang-ui</module>
     <module>lang-server</module>
   </modules>
@@ -67,6 +67,13 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -93,23 +100,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <profiles>
-    <profile>
-      <id>dev</id>
-      <properties>
-        <activatedProperties>dev</activatedProperties>
-      </properties>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-    </profile>
-    <profile>
-      <id>test</id>
-      <properties>
-        <activatedProperties>test</activatedProperties>
-      </properties>
-    </profile>
-  </profiles>
-
 </project>

@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<fx:root alignment="TOP_CENTER" prefHeight="600.0" prefWidth="500.0" style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;" type="VBox" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz20.sw20asd.lang.ui.controllers.OverviewVocabs">
+<fx:root alignment="TOP_CENTER" prefHeight="600.0" prefWidth="500.0" style="-fx-border-style: solid inside; -fx-border-color: grey; -fx-border-radius: 0; -fx-border-width: 10; -fx-background-color: white;" type="VBox" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tugraz.sw20asd.lang.ui.controllers.OverviewVocabs">
 
     <AnchorPane  prefWidth="800.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <children>

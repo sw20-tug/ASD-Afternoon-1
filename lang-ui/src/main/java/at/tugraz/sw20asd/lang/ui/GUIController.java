@@ -1,6 +1,6 @@
-package at.tugraz20.sw20asd.lang.ui;
+package at.tugraz.sw20asd.lang.ui;
 
-import at.tugraz20.sw20asd.lang.ui.controllers.LangUI;
+import at.tugraz.sw20asd.lang.ui.controllers.LangUI;
 
 public class GUIController {
 

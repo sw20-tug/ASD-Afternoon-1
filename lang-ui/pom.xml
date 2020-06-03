@@ -82,7 +82,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.4</version>
         <configuration>
-          <mainClass>at.tugraz.sw20asd.lang.ui.controllers.GUIController</mainClass>
+          <mainClass>at.tugraz.sw20asd.lang.ui.GUIController</mainClass>
         </configuration>
       </plugin>
     </plugins>
