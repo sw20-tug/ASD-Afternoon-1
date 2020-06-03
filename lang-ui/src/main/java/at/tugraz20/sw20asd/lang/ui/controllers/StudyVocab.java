@@ -67,6 +67,11 @@ public class StudyVocab extends VBox {
     private String study_language;
     FXMLLoader loader = new FXMLLoader();
 
+    private String hide_all = "Hide all Answers";
+    private String show_all = "Show all Answers";
+    private String hide = "Hide Answer";
+    private String show = "Show Answer";
+
     public StudyVocab(VocabularyAccess vocab, ObservableList<VocabularySelectionModel> voc) {
         this.vocab = vocab;
         this.voc = voc;
@@ -82,10 +87,7 @@ public class StudyVocab extends VBox {
 
     public void initialize() {
         user_info.setVisible(false);
-        show_all_btn.setVisible(false);
-        switch_btn.setVisible(false);
-        given_label.setVisible(false);
-        study_label.setVisible(false);
+        setStudyInterfaceVisible(false);
         language1 = voc.get(0).getVocabularySrc();
         language2 = voc.get(0).getVocabularyTarget();
         languages_list.add(language1);
@@ -116,23 +118,23 @@ public class StudyVocab extends VBox {
     }
 
     private void showAllAnswers() {
-        if (show_all_btn.getText().equals("Show All Answers")) {
+        if (show_all_btn.getText().equals(show_all)) {
             for (int counter = 0; counter < given_label_list.size(); counter++) {
                 answer_label_list.get(counter).setVisible(true);
-                answer_button_list.get(counter).setText("Hide Answer");
-                show_all_btn.setText("Hide All Answers");
+                answer_button_list.get(counter).setText(hide);
+                show_all_btn.setText(hide_all);
             }
         } else {
             for (int counter = 0; counter < given_label_list.size(); counter++) {
                 answer_label_list.get(counter).setVisible(false);
-                answer_button_list.get(counter).setText("Show Answer");
-                show_all_btn.setText("Show All Answers");
+                answer_button_list.get(counter).setText(show);
+                show_all_btn.setText(show_all);
             }
         }
     }
 
     private void switchLanguage() {
-        show_all_btn.setText("Hide All Answers");
+        show_all_btn.setText(hide_all);
         showAllAnswers();
         String new_given_language = study_label.getText();
         String new_study_language = given_label.getText();
@@ -155,10 +157,7 @@ public class StudyVocab extends VBox {
         else {
             given_label.setText(language1);
         }
-        show_all_btn.setVisible(true);
-        switch_btn.setVisible(true);
-        given_label.setVisible(true);
-        study_label.setVisible(true);
+        setStudyInterfaceVisible(true);
         anchor_pane.getChildren().remove(choice_label);
         anchor_pane.getChildren().remove(language_choice);
         anchor_pane.getChildren().remove(start_btn);
@@ -193,18 +192,18 @@ public class StudyVocab extends VBox {
             answer_list.getChildren().add(answer);
 
             Button show_answer = new Button();
-            show_answer.setText("Show Answer");
+            show_answer.setText(show);
             show_answer.setId("btn" + answer_button_list.size());
             show_answer.setMinHeight(min_height);
             setMargin(show_answer, new Insets(10, 0, 0, 0));
             show_answer.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    if (show_answer.getText().equals("Show Answer")) {
+                    if (show_answer.getText().equals(show)) {
                         answer.setVisible(true);
-                        show_answer.setText("Hide Answer");
+                        show_answer.setText(hide);
                     } else {
                         answer.setVisible(false);
-                        show_answer.setText("Show Answer");
+                        show_answer.setText(show);
                     }
                 }
             });
@@ -225,6 +224,13 @@ public class StudyVocab extends VBox {
         });
     }
 
+    private void setStudyInterfaceVisible(boolean b) {
+        show_all_btn.setVisible(b);
+        switch_btn.setVisible(b);
+        given_label.setVisible(b);
+        study_label.setVisible(b);
+    }
+
     private void getEntryList() {
         //get Vocabulary group
 
@@ -241,7 +247,7 @@ public class StudyVocab extends VBox {
         getVocabsTask.stateProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue == Worker.State.CANCELLED || newValue == Worker.State.FAILED) {
                 Platform.runLater(() -> {
-                    updateUserInformation("");
+                    user_info.setText("Sorry something went wrong!");
                 });
                 getVocabsTask.cancel();
             }
@@ -249,7 +255,7 @@ public class StudyVocab extends VBox {
             if (newValue == Worker.State.SUCCEEDED) {
                 if (vocabulary_list == null) {
                     Platform.runLater(() -> {
-                        updateUserInformation("No words added");
+                        user_info.setText("No words added");
                     });
                 } else {
                     Platform.runLater(() -> {
@@ -271,8 +277,5 @@ public class StudyVocab extends VBox {
         Thread th = new Thread(getVocabsTask);
         th.setDaemon(true);
         th.start();
-    }
-
-    private void updateUserInformation(String s) {
     }
 }
