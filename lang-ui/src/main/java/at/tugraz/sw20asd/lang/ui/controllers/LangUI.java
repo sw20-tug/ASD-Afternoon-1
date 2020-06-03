@@ -1,4 +1,4 @@
-package at.tugraz20.sw20asd.lang.ui.controllers;
+package at.tugraz.sw20asd.lang.ui.controllers;
 
 import javafx.application.Application;
 import javafx.scene.Parent;

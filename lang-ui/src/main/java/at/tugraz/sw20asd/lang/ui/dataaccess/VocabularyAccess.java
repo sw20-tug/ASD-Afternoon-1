@@ -1,4 +1,4 @@
-package at.tugraz20.sw20asd.lang.ui.dataaccess;
+package at.tugraz.sw20asd.lang.ui.dataaccess;
 
 
 import at.tugraz.sw20asd.lang.VocabularyBaseDto;

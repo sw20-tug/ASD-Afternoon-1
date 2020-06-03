@@ -1,8 +1,8 @@
-package at.tugraz20.sw20asd.lang.ui.controllers;
+package at.tugraz.sw20asd.lang.ui.controllers;
 
 import at.tugraz.sw20asd.lang.EntryDto;
 import at.tugraz.sw20asd.lang.VocabularyDetailDto;
-import at.tugraz20.sw20asd.lang.ui.dataaccess.VocabularyAccess;
+import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccess;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;

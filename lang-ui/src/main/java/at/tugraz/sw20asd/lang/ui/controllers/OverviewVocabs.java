@@ -1,7 +1,7 @@
-package at.tugraz20.sw20asd.lang.ui.controllers;
+package at.tugraz.sw20asd.lang.ui.controllers;
 
 import at.tugraz.sw20asd.lang.VocabularyBaseDto;
-import at.tugraz20.sw20asd.lang.ui.dataaccess.VocabularyAccess;
+import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccess;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
