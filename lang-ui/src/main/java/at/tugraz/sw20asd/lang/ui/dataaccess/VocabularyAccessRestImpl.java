@@ -1,8 +1,7 @@
-package at.tugraz.sw20asd.lang.ui.dataaccess;
+package at.tugraz.sw20asd.lang.ui;
 
-
-import at.tugraz.sw20asd.lang.VocabularyBaseDto;
-import at.tugraz.sw20asd.lang.VocabularyDetailDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
+import at.tugraz.sw20asd.lang.dto.VocabularyDetailDto;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -13,8 +12,7 @@ import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class VocabularyAccessRestImpl implements VocabularyAccess {
 
