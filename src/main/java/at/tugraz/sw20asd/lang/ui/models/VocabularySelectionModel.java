@@ -4,7 +4,7 @@ import at.tugraz.sw20asd.lang.dto.VocabularyBaseDto;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-
+import javafx.beans.property.StringProperty;
 
 public class VocabularySelectionModel {
     private final SimpleLongProperty vocabularyId;
@@ -21,10 +21,10 @@ public class VocabularySelectionModel {
 
         vsm.setVocabularyId(v.getId());
         vsm.setVocabularyName(v.getName());
-        vsm.setVocabularySrc(v.getSourceLanguage().toString());
-        vsm.setVocabularyTarget(v.getTargetLanguage().toString());
-        vsm.setVocabularyTranslation(v.getSourceLanguage().toString().toUpperCase() + " - " +
+        vsm.setVocabularySrc(v.getSourceLanguage().toString().toUpperCase() + " - " +
                 v.getTargetLanguage().toString().toUpperCase());
+        vsm.setVocabularyTarget(v.getTargetLanguage().toString());
+        vsm.setVocabularyTranslation(v.getSourceLanguage().toString());
 
         vsm.setSelected(false);
 
