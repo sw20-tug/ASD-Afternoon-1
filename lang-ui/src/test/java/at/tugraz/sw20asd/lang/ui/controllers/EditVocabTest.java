@@ -1,6 +1,6 @@
-package at.tugraz.sw20asd.lang.ui.Controller;
-import at.tugraz.sw20asd.lang.ui.VocabularyAccess;
-import at.tugraz.sw20asd.lang.ui.VocabularyAccessRestImpl;
+package at.tugraz.sw20asd.lang.ui.controllers;
+import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccess;
+import at.tugraz.sw20asd.lang.ui.dataaccess.VocabularyAccessRestImpl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
