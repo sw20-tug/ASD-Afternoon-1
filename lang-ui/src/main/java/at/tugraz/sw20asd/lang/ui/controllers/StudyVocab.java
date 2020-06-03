@@ -277,7 +277,6 @@ public class StudyVocab extends VBox {
                                 }
                             }
                         }
-                        System.out.println(words);
                         populate();
                     });
                 }
