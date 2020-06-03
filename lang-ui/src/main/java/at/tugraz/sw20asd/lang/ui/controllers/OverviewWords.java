@@ -77,7 +77,7 @@ public class OverviewWords extends VBox {
 
         edit_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                EditVocab edit = new EditVocab(vocab, v.getId(), 1);
+                EditVocab edit = new EditVocab(vocab, v.getId(), EditVocab.Mode.OVERVIEW);
                 getScene().setRoot(edit);
             }
         });
