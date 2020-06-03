@@ -88,8 +88,10 @@ public class SelectionOverview extends VBox {
                 if (selectedItems.isEmpty()) {
                     updateUserInformation("nothing_selected");
                 }
-                StudyVocab study = new StudyVocab(vocab, selectedItems);
-                getScene().setRoot(study);
+                else {
+                    StudyVocab study = new StudyVocab(vocab, selectedItems);
+                    getScene().setRoot(study);
+                }
             }
         });
         train_btn.setOnAction(new EventHandler<ActionEvent>() {

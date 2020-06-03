@@ -78,7 +78,7 @@
                </content>
             </ScrollPane>
             <Button fx:id="switch_btn" layoutX="14.0" layoutY="527.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="125.0" text="Switch Language" />
-            <Button fx:id="show_all_btn" layoutX="339.0" layoutY="527.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="125.0" text="Show All Answers" />
+            <Button fx:id="show_all_btn" layoutX="339.0" layoutY="527.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="125.0" text="Show all Answers" />
             <Label fx:id="user_info" layoutX="151.0" layoutY="527.0" prefHeight="38.0" prefWidth="176.0" text="user_info" />
             
             <Label fx:id="choice_label" layoutX="14.0" layoutY="144.0" text="Choose a language to study:" />

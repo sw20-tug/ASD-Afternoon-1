@@ -110,7 +110,8 @@ public class StudyVocab extends VBox {
 
         return_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                OverviewVocabs overview = new OverviewVocabs(vocab);
+                clear();
+                SelectionOverview overview = new SelectionOverview(vocab);
                 getScene().setRoot(overview);
             }
         });
@@ -285,5 +286,17 @@ public class StudyVocab extends VBox {
         Thread th = new Thread(getVocabsTask);
         th.setDaemon(true);
         th.start();
+    }
+
+    private void clear() {
+        getVocabsTask.cancel();
+        answer_button_list.clear();
+        given_label_list.clear();
+        answer_label_list.clear();
+        languages_list.clear();
+        vocabulary_list.clear();
+        voc.clear();
+        words.clear();
+        user_info.setVisible(false);
     }
 }
