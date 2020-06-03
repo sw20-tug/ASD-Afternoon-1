@@ -25,12 +25,6 @@ import java.util.Map;
 
 public class TestingResult extends VBox {
 
-//    class repetitionComparison implements Comparator<TestingResultModel> {
-//        @Override
-//        public int compare(TestingResultModel a, TestingResultModel b) {
-//            return a.getRepetitions().compareToIgnoreCase(b.getRepetitions());
-//        }
-//    }
 
     private VocabularyAccess vocab;
     private ObservableList<VocabularySelectionModel> Vocabularies;
