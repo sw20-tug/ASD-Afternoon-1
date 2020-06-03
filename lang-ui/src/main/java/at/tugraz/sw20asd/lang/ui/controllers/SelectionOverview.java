@@ -88,9 +88,10 @@ public class SelectionOverview extends VBox {
                 if (selectedItems.isEmpty()) {
                     updateUserInformation("nothing_selected");
                 }
-                //TODO switch to study, use selectedItems as param type ObservableList<VocabularySelectionModel>
-                //take care you get a mixed list (e.g. DE - EN and EN - DE are allowed)
-                //think about how to handle it
+                else {
+                    StudyVocab study = new StudyVocab(vocab, selectedItems);
+                    getScene().setRoot(study);
+                }
             }
         });
         train_btn.setOnAction(new EventHandler<ActionEvent>() {
