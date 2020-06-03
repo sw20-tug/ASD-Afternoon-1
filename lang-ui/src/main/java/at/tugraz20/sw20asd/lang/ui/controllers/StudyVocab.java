@@ -162,8 +162,6 @@ public class StudyVocab extends VBox {
         anchor_pane.getChildren().remove(language_choice);
         anchor_pane.getChildren().remove(start_btn);
 
-        int min_height = 30;
-        int margin = 10;
         for (int counter = 0; counter < words.size(); counter++) {
 
             String given_str;
@@ -175,40 +173,9 @@ public class StudyVocab extends VBox {
                 given_str = words.get(counter).getPhrase();
                 answer_str = words.get(counter).getTranslation();
             }
-
-            Label given = new Label(given_str);
-            given.setId("given" + given_label_list.size());
-            given.setMinHeight(min_height);
-            setMargin(given, new Insets(margin, 0, 0, 0));
-            given_label_list.add(given);
-            given_list.getChildren().add(given);
-
-            Label answer = new Label(answer_str);
-            answer.setId("answer" + answer_label_list.size());
-            answer.setVisible(false);
-            answer.setMinHeight(min_height);
-            setMargin(answer, new Insets(10, 0, 0, 0));
-            answer_label_list.add(answer);
-            answer_list.getChildren().add(answer);
-
-            Button show_answer = new Button();
-            show_answer.setText(show);
-            show_answer.setId("btn" + answer_button_list.size());
-            show_answer.setMinHeight(min_height);
-            setMargin(show_answer, new Insets(10, 0, 0, 0));
-            show_answer.setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    if (show_answer.getText().equals(show)) {
-                        answer.setVisible(true);
-                        show_answer.setText(hide);
-                    } else {
-                        answer.setVisible(false);
-                        show_answer.setText(show);
-                    }
-                }
-            });
-            answer_button_list.add(show_answer);
-            show_answer_list.getChildren().add(show_answer);
+            createGivenLabel(given_str);
+            Label answer = createAnswerLabel(answer_str);
+            createShowAnswerButton(answer);
         }
 
         switch_btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -222,6 +189,47 @@ public class StudyVocab extends VBox {
                 showAllAnswers();
             }
         });
+    }
+
+    private void createShowAnswerButton(Label answer) {
+        Button show_answer = new Button();
+        show_answer.setText(show);
+        show_answer.setId("btn" + answer_button_list.size());
+        show_answer.setMinHeight(30);
+        setMargin(show_answer, new Insets(10, 0, 0, 0));
+        show_answer.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                if (show_answer.getText().equals(show)) {
+                    answer.setVisible(true);
+                    show_answer.setText(hide);
+                } else {
+                    answer.setVisible(false);
+                    show_answer.setText(show);
+                }
+            }
+        });
+        answer_button_list.add(show_answer);
+        show_answer_list.getChildren().add(show_answer);
+    }
+
+    private void createGivenLabel(String given_str) {
+        Label given = new Label(given_str);
+        given.setId("given" + given_label_list.size());
+        given.setMinHeight(30);
+        setMargin(given, new Insets(10, 0, 0, 0));
+        given_label_list.add(given);
+        given_list.getChildren().add(given);
+    }
+
+    private Label createAnswerLabel(String answer_str) {
+        Label answer = new Label(answer_str);
+        answer.setId("answer" + answer_label_list.size());
+        answer.setVisible(false);
+        answer.setMinHeight(30);
+        setMargin(answer, new Insets(10, 0, 0, 0));
+        answer_label_list.add(answer);
+        answer_list.getChildren().add(answer);
+        return answer;
     }
 
     private void setStudyInterfaceVisible(boolean b) {
